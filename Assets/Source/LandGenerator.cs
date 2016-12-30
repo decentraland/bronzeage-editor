@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+using System.Runtime.Serialization;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -108,15 +109,51 @@ public class LandGenerator : MonoBehaviour {
 		plane.transform.position = pos;
 		plane.transform.localScale = new Vector3 (TILE_SCALE, TILE_SCALE, TILE_SCALE);
 
-		WWW www = new WWW("http://localhost:8000/tile/" + index[0] + ":" + index[1] + ".tld");
+		// Basic Auth
+		Dictionary<string,string> headers = new Dictionary<string, string>();
+		headers["Authorization"] = "Basic " + System.Convert.ToBase64String(
+			System.Text.Encoding.ASCII.GetBytes("bitcoinrpc:38Dpwnjsj2zn3QETJ6GKv8YkHomA"));
+
+		string json = "{\"method\":\"gettile\",\"params\":[" + index [0] + "," + index [1] + "],\"id\":0}";
+		byte[] data = System.Text.Encoding.ASCII.GetBytes(json.ToCharArray());
+
+		WWW www = new WWW("http://localhost:8001/", data, headers);
 		yield return www;
 
 		if (string.IsNullOrEmpty(www.error)) {
-			STile t = STile.FromBytes (www.bytes);
-			t.ToInstance (pos);
-			names.Add (index, t.GetName ());
-			Destroy(plane);
+			RPCResponse response = JsonUtility.FromJson<RPCResponse>(www.text);
+			Debug.Log("Tail " + index + " -> " + response.IsEmpty() + " " + response.IsUnmined());
+
+			MeshRenderer renderer = plane.GetComponent<MeshRenderer> ();
+			if (response.IsEmpty ()) {
+				renderer.material.color = Color.green;
+			} else if (response.IsUnmined ()) {
+				renderer.material.color = Color.gray;
+			}
+
+//			STile t = STile.FromBytes (www.bytes);
+//			t.ToInstance (pos);
+//			names.Add (index, t.GetName ());
+//			Destroy(plane);
+		} else {
+			Debug.Log("Error! " + www.error);
 		}
+
+
+	}
+}
+
+[System.Serializable]
+class RPCResponse {
+	public string result;
+	public string error;
+	public string id;
+
+	public bool IsUnmined() {
+		return this.result == "";
 	}
 
+	public bool IsEmpty() {
+		return this.result == "0000000000000000000000000000000000000000000000000000000000000000";
+	}
 }
