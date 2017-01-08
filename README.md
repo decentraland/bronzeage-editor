@@ -63,7 +63,7 @@ Build your land by placing all content under `My Tile`  game object’s hierarch
 There are some limitations on what you can do on your tile:
 
 * Only primitive meshs: Cube, Plane, Sphere, Cylinder and Capsule.
-* Only Colors and 2D Textures (see notes).
+* Only Colors and 2D Textures ([see notes](./docs/EDITOR.md)).
 * Hard limit of 1024 game objects inside the tile.
 * Can’t place objects beyond the bounds of the tile.
 * Not yet supported: Scripts, Animations, Shaders, etc.
