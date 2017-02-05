@@ -90,7 +90,7 @@ public class LandGenerator : MonoBehaviour {
 
 	void OnGUI () {
 		string tileName;
-		if (!names.TryGetValue (currentTile, out tileName)) tileName = "Empty Tile";
+		if (!names.TryGetValue (currentTile, out tileName)) tileName = "Empty Land";
 		string message = tileName + " (" + currentTile [0] + ":" + currentTile [1] + ")";
 		GUI.Label (new Rect (10, 10, 200, 20), message);
 	}
@@ -100,6 +100,46 @@ public class LandGenerator : MonoBehaviour {
 		float z = (index [1] * TILE_SIZE);
 		return new Vector3 (x, 0, z);
 	}
+
+//	IEnumerator PublishTile(Vector2 index) {
+//		Vector3 pos = indexToPosition (index);
+//
+//		// Temporal Placeholder
+//		GameObject plane = GameObject.CreatePrimitive (PrimitiveType.Plane);
+//		plane.transform.position = pos;
+//		plane.transform.localScale = new Vector3 (TILE_SCALE, TILE_SCALE, TILE_SCALE);
+//
+//		// Basic Auth
+//		Dictionary<string,string> headers = new Dictionary<string, string>();
+//		headers["Authorization"] = "Basic " + System.Convert.ToBase64String(
+//			System.Text.Encoding.ASCII.GetBytes("bitcoinrpc:38Dpwnjsj2zn3QETJ6GKv8YkHomA"));
+//
+//		string json = "{\"method\":\"gettile\",\"params\":[" + index [0] + "," + index [1] + "],\"id\":0}";
+//		byte[] data = System.Text.Encoding.ASCII.GetBytes(json.ToCharArray());
+//
+//		WWW www = new WWW("http://localhost:8001/", data, headers);
+//		yield return www;
+//
+//		if (string.IsNullOrEmpty(www.error)) {
+//			RPCResponse response = JsonUtility.FromJson<RPCResponse>(www.text);
+//			Debug.Log("Tail " + index + " -> " + response.IsEmpty() + " " + response.IsUnmined());
+//
+//			MeshRenderer renderer = plane.GetComponent<MeshRenderer> ();
+//			if (response.IsEmpty ()) {
+//				renderer.material.color = Color.green;
+//			} else if (response.IsUnmined ()) {
+//				renderer.material.color = Color.gray;
+//				names.Add (index, "Unclaimed Land");
+//			}
+//
+//			//			STile t = STile.FromBytes (www.bytes);
+//			//			t.ToInstance (pos);
+//			//			names.Add (index, t.GetName ());
+//			//			Destroy(plane);
+//		} else {
+//			Debug.Log("Error! " + www.error);
+//		}
+//	}
 
 	IEnumerator FetchTile(Vector2 index) {
 		Vector3 pos = indexToPosition (index);
@@ -114,6 +154,7 @@ public class LandGenerator : MonoBehaviour {
 		headers["Authorization"] = "Basic " + System.Convert.ToBase64String(
 			System.Text.Encoding.ASCII.GetBytes("bitcoinrpc:38Dpwnjsj2zn3QETJ6GKv8YkHomA"));
 
+		// JSON Data
 		string json = "{\"method\":\"gettile\",\"params\":[" + index [0] + "," + index [1] + "],\"id\":0}";
 		byte[] data = System.Text.Encoding.ASCII.GetBytes(json.ToCharArray());
 
@@ -122,32 +163,43 @@ public class LandGenerator : MonoBehaviour {
 
 		if (string.IsNullOrEmpty(www.error)) {
 			RPCResponse response = JsonUtility.FromJson<RPCResponse>(www.text);
-			Debug.Log("Tail " + index + " -> " + response.IsEmpty() + " " + response.IsUnmined());
-
 			MeshRenderer renderer = plane.GetComponent<MeshRenderer> ();
+
 			if (response.IsEmpty ()) {
 				renderer.material.color = Color.green;
+			
 			} else if (response.IsUnmined ()) {
 				renderer.material.color = Color.gray;
+				names.Add (index, "Unclaimed Land");
+			
+			} else if (response.HasData()) {
+
+				// Download tile content
+				string fileName = "" + index [0] + "." + index [1] + ".lnd";
+				www = new WWW("http://localhost:9000/tile/" + fileName);
+				yield return www;
+
+				if (string.IsNullOrEmpty (www.error)) {
+					STile t = STile.FromBytes (www.bytes);
+					t.ToInstance (pos);
+					names.Add (index, t.GetName ());
+					Destroy (plane);
+				} else {
+					Debug.Log("Can't fetch tile content! " + index + " " + www.error);
+				}
 			}
 
-//			STile t = STile.FromBytes (www.bytes);
-//			t.ToInstance (pos);
-//			names.Add (index, t.GetName ());
-//			Destroy(plane);
 		} else {
-			Debug.Log("Error! " + www.error);
+			Debug.Log("Error on RPC call 'gettile': " + www.error);
 		}
-
-
 	}
 }
 
 [System.Serializable]
-class RPCResponse {
-	public string result;
-	public string error;
-	public string id;
+public class RPCResponse {
+	public string result = null;
+	public string error = null;
+	public string id = null;
 
 	public bool IsUnmined() {
 		return this.result == "";
@@ -155,5 +207,9 @@ class RPCResponse {
 
 	public bool IsEmpty() {
 		return this.result == "0000000000000000000000000000000000000000000000000000000000000000";
+	}
+
+	public bool HasData() {
+		return !(this.IsEmpty () || this.IsUnmined ());
 	}
 }
