@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 
+using System;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
+
 
 [System.Serializable]
 public class STile {
@@ -117,6 +119,14 @@ public class STile {
 		using (file) {
 			IFormatter formatter = GetFormater ();
 			formatter.Serialize(file, this);
+		}
+	}
+
+	public string ToBase64() {
+		using (MemoryStream stream = new MemoryStream()) {
+			IFormatter formatter = GetFormater ();
+			formatter.Serialize(stream, this);
+			return Convert.ToBase64String(stream.ToArray());
 		}
 	}
 }

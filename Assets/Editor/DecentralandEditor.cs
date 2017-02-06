@@ -63,11 +63,8 @@ public class DecentralandEditor : EditorWindow
 				(tile.transform.position.x / TILE_SIZE) + xOffset,
 				(tile.transform.position.z / TILE_SIZE) + zOffset
 			);
-			string path = Application.persistentDataPath + "/" + index [0] + ":" + index [1] + ".tld";
-			original.ToFile (path);
-
-			// Call RPC method
-			PublishTile(index, path);
+			string content = original.ToBase64 ();
+			PublishTile(index, content);
 		}
 	}
 
