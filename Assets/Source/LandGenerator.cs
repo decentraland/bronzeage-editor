@@ -151,7 +151,7 @@ public class LandGenerator : MonoBehaviour {
 		//GameObject plane = GameObject.CreatePrimitive (PrimitiveType.Plane);
         GameObject plane = Instantiate(terrain, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
         plane.transform.position = pos;
-		plane.transform.localScale = new Vector3 (TILE_SCALE, TILE_SCALE, TILE_SCALE);
+		//plane.transform.localScale = new Vector3 (TILE_SCALE, TILE_SCALE, TILE_SCALE);
 
 		// Basic Auth
 		Dictionary<string,string> headers = new Dictionary<string, string>();
