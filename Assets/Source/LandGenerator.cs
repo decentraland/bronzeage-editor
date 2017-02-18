@@ -158,7 +158,7 @@ public class LandGenerator : MonoBehaviour {
 		string json = "{\"method\":\"gettile\",\"params\":[" + index [0] + "," + index [1] + "],\"id\":0}";
 		byte[] data = System.Text.Encoding.ASCII.GetBytes(json.ToCharArray());
 
-		WWW www = new WWW("http://localhost:8001/", data, headers);
+		WWW www = new WWW("http://localhost:8301/", data, headers);
 		yield return www;
 
 		if (string.IsNullOrEmpty(www.error)) {
@@ -169,14 +169,14 @@ public class LandGenerator : MonoBehaviour {
 				renderer.material.color = Color.green;
 			
 			} else if (response.IsUnmined ()) {
-				renderer.material.color = Color.gray;
+				renderer.material.color = Color.white;
 				names.Add (index, "Unclaimed Land");
 			
 			} else if (response.HasData()) {
 
 				// Download tile content
 				string fileName = "" + index [0] + "." + index [1] + ".lnd";
-				www = new WWW("http://localhost:9000/tile/" + fileName);
+				www = new WWW("http://localhost:9301/tile/" + fileName);
 				yield return www;
 
 				if (string.IsNullOrEmpty (www.error)) {

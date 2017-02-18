@@ -117,18 +117,20 @@ public class DecentralandEditor : EditorWindow
 		return position;
 	}
 
-	void PublishTile(Vector2 index, string path) {
-		Debug.Log ("Llamando a publish tile");
+	void PublishTile(Vector2 index, string content) {
+		Debug.Log ("==== Llamando a publish tile =====");
+		Debug.Log (index);
+		Debug.Log (content);
 			
 		// Basic Auth
 		Dictionary<string,string> headers = new Dictionary<string, string>();
 		headers["Authorization"] = "Basic " + System.Convert.ToBase64String(
-			System.Text.Encoding.ASCII.GetBytes("bitcoinrpc:38Dpwnjsj2zn3QETJ6GKv8YkHomA"));
+			System.Text.Encoding.ASCII.GetBytes(nodeAuth));
 
-		string json = "{\"method\":\"settile\",\"params\":[" + index [0] + "," + index [1] + ",\"" + path + "\"],\"id\":0}";
+		string json = "{\"method\":\"settile\",\"params\":[" + index [0] + "," + index [1] + ",\"" + content + "\"],\"id\":0}";
 		byte[] data = System.Text.Encoding.ASCII.GetBytes(json.ToCharArray());
 
-		WWW www = new WWW("http://localhost:8001/", data, headers);
+		WWW www = new WWW(nodeAddress, data, headers);
 
 		while (!www.isDone) {
 //			WaitForSeconds (5);
