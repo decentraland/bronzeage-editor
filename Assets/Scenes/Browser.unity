@@ -184,6 +184,7 @@ MonoBehaviour:
   player: {fileID: 1515792454}
   borderBox: {fileID: 1564927376}
   terrain: {fileID: 1755224605657166, guid: 8bf8e60811d15cd45b7753ea172af054, type: 2}
+  loading: {fileID: 1817359628488608, guid: cb156e3e08f81e84998bdffad11a8fc8, type: 2}
 --- !u!4 &146392459
 Transform:
   m_ObjectHideFlags: 0
