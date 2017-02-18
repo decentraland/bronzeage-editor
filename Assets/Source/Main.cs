@@ -56,20 +56,9 @@ public class STile {
 		// Store Local Transform
 		this.name = tile.name;
 
-		// Store Renderer Color
-		MeshRenderer meshRenderer = tile.GetComponent<MeshRenderer>();
-		if (meshRenderer.sharedMaterial.HasProperty ("_Color")) {
-			this.color = meshRenderer.sharedMaterial.color;
-		}
-
-		// Store Renderer Material
-		if (meshRenderer.sharedMaterial.mainTexture) {
-			Texture2D tex = (Texture2D)meshRenderer.sharedMaterial.mainTexture;
-			this.texture = tex.EncodeToJPG ();
-		}
-
-		// Store Childs
-		Bounds bounds = tile.GetComponent<Renderer>().bounds;
+        // Store Childs
+        Bounds bounds = new Bounds(Vector3.zero, new Vector3(100, 100, 100));
+            //tile.GetComponent<Renderer>().bounds;
 		childs = new SObject[tile.transform.childCount];
 		int index = 0;
 		int childCount = 0;
