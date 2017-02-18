@@ -8,8 +8,10 @@ public class LandGenerator : MonoBehaviour {
 
 	public GameObject player;
 	public GameObject borderBox;
+    public GameObject terrain;
 
-	private static float TILE_SCALE = 4;
+
+    private static float TILE_SCALE = 4;
 	private static float TILE_SIZE = TILE_SCALE * 10;
 
 	private Dictionary<Vector2, bool> world = new Dictionary<Vector2, bool>();
@@ -28,6 +30,7 @@ public class LandGenerator : MonoBehaviour {
 		Vector2 current = GetCurrentPlane(player.transform.position);
 
 		// Update Border Box
+        
 		if (current != currentTile) {
 			borderBox.transform.position = indexToPosition (current);
 			currentTile = current;
@@ -145,8 +148,9 @@ public class LandGenerator : MonoBehaviour {
 		Vector3 pos = indexToPosition (index);
 
 		// Temporal Placeholder
-		GameObject plane = GameObject.CreatePrimitive (PrimitiveType.Plane);
-		plane.transform.position = pos;
+		//GameObject plane = GameObject.CreatePrimitive (PrimitiveType.Plane);
+        GameObject plane = Instantiate(terrain, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
+        plane.transform.position = pos;
 		plane.transform.localScale = new Vector3 (TILE_SCALE, TILE_SCALE, TILE_SCALE);
 
 		// Basic Auth
@@ -158,7 +162,7 @@ public class LandGenerator : MonoBehaviour {
 		string json = "{\"method\":\"gettile\",\"params\":[" + index [0] + "," + index [1] + "],\"id\":0}";
 		byte[] data = System.Text.Encoding.ASCII.GetBytes(json.ToCharArray());
 
-		WWW www = new WWW("http://localhost:8301/", data, headers);
+		WWW www = new WWW("http://s1.decentraland.org:8301/", data, headers);
 		yield return www;
 
 		if (string.IsNullOrEmpty(www.error)) {
@@ -166,17 +170,19 @@ public class LandGenerator : MonoBehaviour {
 			MeshRenderer renderer = plane.GetComponent<MeshRenderer> ();
 
 			if (response.IsEmpty ()) {
-				renderer.material.color = Color.green;
+                // TODO: do empty behavior
+				//renderer.material.color = Color.green;
 			
 			} else if (response.IsUnmined ()) {
-				renderer.material.color = Color.white;
-				names.Add (index, "Unclaimed Land");
+				//renderer.material.color = Color.white;
+                // TODO: do unmined behavior: boulders
+				names.Add(index, "Unclaimed Land");
 			
 			} else if (response.HasData()) {
 
 				// Download tile content
 				string fileName = "" + index [0] + "." + index [1] + ".lnd";
-				www = new WWW("http://localhost:9301/tile/" + fileName);
+				www = new WWW("http://s1.decentraland.org:9301/tile/" + fileName);
 				yield return www;
 
 				if (string.IsNullOrEmpty (www.error)) {
