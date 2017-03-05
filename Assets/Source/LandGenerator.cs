@@ -109,10 +109,9 @@ public class LandGenerator : MonoBehaviour {
 		Vector3 pos = indexToPosition (index);
 
 		// Temporal Placeholder
-		//GameObject plane = GameObject.CreatePrimitive (PrimitiveType.Plane);
-        GameObject plane = Instantiate(terrain, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
-        plane.transform.position = pos;
-        GameObject loader = Instantiate(loading, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
+        GameObject plane = Instantiate(terrain, pos, Quaternion.identity);
+        GameObject loader = Instantiate(loading, pos, Quaternion.identity);
+        loader.transform.position = new Vector3(pos.x, pos.y + 2, pos.z);
 
         // Basic Auth
         Dictionary<string,string> headers = new Dictionary<string, string>();
@@ -132,15 +131,9 @@ public class LandGenerator : MonoBehaviour {
             Destroy(loader);
 			if (response.IsEmpty ()) {
                 // TODO: do empty behavior
-				//renderer.material.color = Color.green;
-			
 			} else if (response.IsUnmined ()) {
-				//renderer.material.color = Color.white;
-                // TODO: do unmined behavior: boulders
 				names.Add(index, "Unclaimed Land");
-			
 			} else if (response.HasData()) {
-
 				// Download tile content
 				string fileName = "" + index [0] + "." + index [1] + ".lnd";
 				www = new WWW("http://s1.decentraland.org:9301/tile/" + fileName);
