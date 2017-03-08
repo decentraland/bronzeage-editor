@@ -67,3 +67,7 @@ There are some limitations on what you can do on your tile:
 * Hard limit of 1024 game objects inside the tile.
 * Can’t place objects beyond the bounds of the tile.
 * Not yet supported: Scripts, Animations, Shaders, etc.
+
+
+# Music Credits
+Music by [D.I.E.T.R.I.C.H](http://www.d-i-e-t-r-i-c-h.com/), an amazing Argentine band, who generously allowed us to use their music for this project.
