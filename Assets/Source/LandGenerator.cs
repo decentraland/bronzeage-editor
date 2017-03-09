@@ -8,7 +8,7 @@ public class LandGenerator : MonoBehaviour {
 
 	public GameObject player;
 	public GameObject borderBox;
-    public GameObject terrain;
+    public GameObject baseTile;
     public GameObject loading;
 
 
@@ -109,7 +109,7 @@ public class LandGenerator : MonoBehaviour {
 		Vector3 pos = indexToPosition (index);
 
 		// Temporal Placeholder
-        GameObject plane = Instantiate(terrain, pos, Quaternion.identity);
+        GameObject plane = Instantiate(baseTile, pos, Quaternion.identity);
         GameObject loader = Instantiate(loading, pos, Quaternion.identity);
         loader.transform.position = new Vector3(pos.x, pos.y + 2, pos.z);
 
@@ -127,7 +127,7 @@ public class LandGenerator : MonoBehaviour {
 
 		if (string.IsNullOrEmpty(www.error)) {
 			RPCResponse response = JsonUtility.FromJson<RPCResponse>(www.text);
-			MeshRenderer renderer = plane.GetComponent<MeshRenderer> ();
+			MeshRenderer planeRenderer = plane.GetComponent<MeshRenderer> ();
             Destroy(loader);
 			if (response.IsEmpty ()) {
                 // TODO: do empty behavior
@@ -141,9 +141,10 @@ public class LandGenerator : MonoBehaviour {
 
 				if (string.IsNullOrEmpty (www.error)) {
 					STile t = STile.FromBytes (www.bytes);
-					t.ToInstance (pos);
+					GameObject tileGO = t.ToInstance(pos);
+                    //tileGO.SetActive(false);
 					names.Add (index, t.GetName ());
-					Destroy (plane);
+					//Destroy (plane);
 				} else {
 					Debug.Log("Can't fetch tile content! " + index + " " + www.error);
 				}

@@ -14,7 +14,7 @@ public class DecentralandEditor : EditorWindow
 	private static float TILE_SCALE = 4;
 	private static float TILE_SIZE = TILE_SCALE * 10;
 
-	string nodeAddress = "http://localhost:8001";
+	string nodeAddress = "http://localhost:8301";
 	string nodeAuth = "bitcoinrpc:???????";
 	int xOffset = 0;
 	int zOffset = 0;
@@ -35,7 +35,8 @@ public class DecentralandEditor : EditorWindow
 		GameObject tile = Selection.activeGameObject;
 
 		if (!tile) {
-			GUILayout.Label ("Select a tile in the hierarchy view");
+            EditorGUILayout.HelpBox("Select a tile in the hierarchy view to enable Decentraland tile uploader.", MessageType.Warning);
+            //GUILayout.Label ("Select a tile in the hierarchy view to enable Decentraland tile uploader.");
 			return;
 		}
 
@@ -43,11 +44,11 @@ public class DecentralandEditor : EditorWindow
 		nodeAuth = EditorGUILayout.TextField ("Node Auth", nodeAuth);
 		EditorGUILayout.BeginHorizontal ();
 
-		GUILayout.Label ("Tile Offset");
+		GUILayout.Label ("Tile Coordinates");
 
 		GUILayout.Label ("X");
 		xOffset = EditorGUILayout.IntField (xOffset);
-		GUILayout.Label ("Z");
+		GUILayout.Label ("Y");
 		zOffset = EditorGUILayout.IntField (zOffset);
 
 		EditorGUILayout.EndHorizontal ();
@@ -118,7 +119,7 @@ public class DecentralandEditor : EditorWindow
 	}
 
 	void PublishTile(Vector2 index, string content) {
-		Debug.Log ("==== Llamando a publish tile =====");
+		Debug.Log ("==== Calling publish tile =====");
 		Debug.Log (index);
 		Debug.Log (content);
 			
