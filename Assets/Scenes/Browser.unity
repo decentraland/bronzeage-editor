@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.45114923, g: 0.49976665, b: 0.5676684, a: 1}
+  m_IndirectSpecularColor: {r: 0.45114928, g: 0.4997651, b: 0.56766605, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -688,15 +688,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   songs:
-  - {fileID: 8300000, guid: b166b3e162288f34ea7b35b56dfa1c3a, type: 3}
+  - {fileID: 0}
   - {fileID: 8300000, guid: 2e1d9cb61d15b114bbc615320d6c9f47, type: 3}
-  - {fileID: 8300000, guid: 82fa37c2bd063f34b8728e232fcd02ec, type: 3}
+  - {fileID: 0}
   - {fileID: 8300000, guid: 1af3b42926b7ff8459eaa2b440c58eaa, type: 3}
-  - {fileID: 8300000, guid: 7bc1e5e10f6476f4ea954a31bbc840af, type: 3}
+  - {fileID: 0}
   - {fileID: 8300000, guid: 0fd00eec5fe810447b6508ccf5aba598, type: 3}
   - {fileID: 8300000, guid: 1ed3971c3f8effb46a565ecbb9ca3751, type: 3}
   - {fileID: 8300000, guid: 527e550c56d542b448801824393eaef1, type: 3}
-  - {fileID: 8300000, guid: ef9def5bcb8eeca43aa4642e6129bc0e, type: 3}
+  - {fileID: 0}
   musicVolume: 0.7
 --- !u!45 &1905461739
 Skybox:
@@ -727,7 +727,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2007082655}
-  m_LocalRotation: {x: 0, y: 0.38268343, z: 0, w: 0.92387956}
+  m_LocalRotation: {x: 0, y: -0.8870109, z: 0, w: 0.46174863}
   m_LocalPosition: {x: 0, y: 5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -736,7 +736,7 @@ Transform:
   - {fileID: 31505184}
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -125, z: 0}
 --- !u!1 &2043315900
 GameObject:
   m_ObjectHideFlags: 0

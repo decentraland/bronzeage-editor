@@ -10,13 +10,6 @@ public class MusicPlayer : MonoBehaviour
 
     void Awake()
     {
-        if (Network.isServer)
-        {
-            enabled = false;
-            Destroy(this);
-            return;
-        }
-
         if (GetComponent<AudioSource>() == null)
         {
             gameObject.AddComponent<AudioSource>();

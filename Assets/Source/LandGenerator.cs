@@ -122,7 +122,7 @@ public class LandGenerator : MonoBehaviour {
 		string json = "{\"method\":\"gettile\",\"params\":[" + index [0] + "," + index [1] + "],\"id\":0}";
 		byte[] data = System.Text.Encoding.ASCII.GetBytes(json.ToCharArray());
 
-		WWW www = new WWW("http://s1.decentraland.org:8301/", data, headers);
+		WWW www = new WWW("https://decentraland.org/api", data, headers);
 		yield return www;
 
 		if (string.IsNullOrEmpty(www.error)) {
@@ -136,7 +136,7 @@ public class LandGenerator : MonoBehaviour {
 			} else if (response.HasData()) {
 				// Download tile content
 				string fileName = "" + index [0] + "." + index [1] + ".lnd";
-				www = new WWW("http://s1.decentraland.org:9301/tile/" + fileName);
+				www = new WWW("https://decentraland.org/content/tile/" + fileName);
 				yield return www;
 
 				if (string.IsNullOrEmpty (www.error)) {

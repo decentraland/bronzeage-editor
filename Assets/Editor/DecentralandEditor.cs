@@ -14,7 +14,8 @@ public class DecentralandEditor : EditorWindow
 	private static float TILE_SCALE = 4;
 	private static float TILE_SIZE = TILE_SCALE * 10;
 
-	string nodeAddress = "http://localhost:8301";
+    [Header("Decentraland Editor")]
+    string nodeAddress = "http://localhost:8301";
 	string nodeAuth = "bitcoinrpc:???????";
 	int xOffset = 0;
 	int zOffset = 0;
@@ -36,28 +37,29 @@ public class DecentralandEditor : EditorWindow
 
 		if (!tile) {
             EditorGUILayout.HelpBox("Select a tile in the hierarchy view to enable Decentraland tile uploader.", MessageType.Warning);
-            //GUILayout.Label ("Select a tile in the hierarchy view to enable Decentraland tile uploader.");
 			return;
 		}
 
-		nodeAddress = EditorGUILayout.TextField ("Node URL", nodeAddress);
-		nodeAuth = EditorGUILayout.TextField ("Node Auth", nodeAuth);
-		EditorGUILayout.BeginHorizontal ();
+        GUILayout.Label("\n");
+        GUILayout.Label("Configuration\n");
 
-		GUILayout.Label ("Tile Coordinates");
+        nodeAddress = EditorGUILayout.TextField ("Your Node RPC URL", nodeAddress);
+		nodeAuth = EditorGUILayout.TextField ("Node RPC Auth Token", nodeAuth);
+		
 
-		GUILayout.Label ("X");
+        GUILayout.Label("\n");
+        GUILayout.Label("\n");
+        GUILayout.Label("Editor\n");
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Tile Coordinates");
+		GUILayout.Label("X");
 		xOffset = EditorGUILayout.IntField (xOffset);
-		GUILayout.Label ("Y");
+		GUILayout.Label("Y");
 		zOffset = EditorGUILayout.IntField (zOffset);
 
 		EditorGUILayout.EndHorizontal ();
 
-		if (GUILayout.Button ("New Tile")) {
-			CreateEmtpy (GetEmptyPosition ());
-		}
-
-		if (GUILayout.Button("Publish Tile")) {
+		if (GUILayout.Button("Publish Selected Tile ")) {
 			// Serialize to file
 			STile original = new STile (tile);
 			Vector2 index = new Vector2(
@@ -67,7 +69,9 @@ public class DecentralandEditor : EditorWindow
 			string content = original.ToBase64 ();
 			PublishTile(index, content);
 		}
-	}
+
+        EditorGUILayout.HelpBox("", MessageType.Info);
+    }
 
 	private void CreateEmtpy(Vector3 position) {
 		GameObject go = GameObject.CreatePrimitive(PrimitiveType.Plane);

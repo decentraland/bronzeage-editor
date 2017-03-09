@@ -216,8 +216,10 @@ public class SObject {
 
 		MeshRenderer renderer = go.GetComponent<MeshRenderer>();
 		renderer.material.color = this.color;
+        Debug.Log("COLOR:" + this.color);
 
 		if (this.texture != null) {
+            Debug.Log("Texture set"); 
 			Texture2D tex = new Texture2D (2, 2);
 			tex.LoadImage (this.texture);
 			renderer.material.mainTexture = tex;
