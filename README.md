@@ -27,6 +27,9 @@ There are some limitations on what you can do on your tile:
 * Can’t place objects beyond the bounds of the tile.
 * Not yet supported: Scripts, Animations, Shaders, etc.
 
+# Feedback and support
+For get help and give feebdack [join our slack](https://rauchg-slackin-ueglzmcnsv.now.sh/) and talk to the development team. You can also report bugs by [opening a github issue](https://github.com/decentraland/bronzeage-editor/issues/new).
+
 
 # Music Credits
 Music by [D.I.E.T.R.I.C.H](http://www.d-i-e-t-r-i-c-h.com/), an amazing Argentine band, who generously allowed us to use their music for this project.
