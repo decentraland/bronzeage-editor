@@ -215,6 +215,7 @@ public class SObject {
 		}
 
 		MeshRenderer renderer = go.GetComponent<MeshRenderer>();
+        Debug.Log("Renderer material " + renderer.material);
 		renderer.material.color = this.color;
         Debug.Log("COLOR:" + this.color);
 

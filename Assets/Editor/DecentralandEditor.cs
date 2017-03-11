@@ -14,6 +14,10 @@ public class DecentralandEditor : EditorWindow
 	private static float TILE_SCALE = 4;
 	private static float TILE_SIZE = TILE_SCALE * 10;
 
+    private bool publishing = false;
+    private bool publishError = false;
+
+
     [Header("Decentraland Editor")]
     string nodeAddress = "http://localhost:8301";
 	string nodeAuth = "bitcoinrpc:???????";
@@ -66,11 +70,20 @@ public class DecentralandEditor : EditorWindow
 				(tile.transform.position.x / TILE_SIZE) + xOffset,
 				(tile.transform.position.z / TILE_SIZE) + zOffset
 			);
-			string content = original.ToBase64 ();
-			PublishTile(index, content);
+			string content = original.ToBase64();
+
+            PublishTile(index, content);
 		}
 
-        EditorGUILayout.HelpBox("", MessageType.Info);
+        if (publishError)
+        {
+            EditorGUILayout.HelpBox("Error publishing tile!", MessageType.Error);
+        }
+        else
+        {
+            EditorGUILayout.HelpBox(publishing ? ("Publishing tile at (" + xOffset + "," + zOffset + ")") : "", MessageType.Info);
+        }
+        
     }
 
 	private void CreateEmtpy(Vector3 position) {
@@ -126,9 +139,12 @@ public class DecentralandEditor : EditorWindow
 		Debug.Log ("==== Calling publish tile =====");
 		Debug.Log (index);
 		Debug.Log (content);
-			
-		// Basic Auth
-		Dictionary<string,string> headers = new Dictionary<string, string>();
+
+        publishing = true;
+        publishError = false;
+
+        // Basic Auth
+        Dictionary<string,string> headers = new Dictionary<string, string>();
 		headers["Authorization"] = "Basic " + System.Convert.ToBase64String(
 			System.Text.Encoding.ASCII.GetBytes(nodeAuth));
 
@@ -146,7 +162,9 @@ public class DecentralandEditor : EditorWindow
 			Debug.Log("Published: " + response.result);
 		} else {
 			Debug.Log("Error publishing tile! " + www.error);
+            publishError = true;
 		}
-	}
+        publishing = false;
+    }
 
 }
