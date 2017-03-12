@@ -21,7 +21,7 @@ While the miner is running, you'll want to [download Unity3D](https://unity3d.co
 
 In Unity, open the *World Editor* Scene (found in the Scenes folder) and include the Decentraland Editor (`Window -> Decentraland Editor`) panel somewhere in your workspace. Make sure to fill your node address and port in the panel, in order to publish changes directly from the editor.
 
-Build your land by placing all content under `My Tile` game object’s hierarchy. Once you are ready, select your tile in the object hierarchy, fill the coordinates of a tile you mined in the `Decentraland Editor` panel, and click on `Publish Tile`. This will serialize the tile content and push it to the node. The node will craft, sign and broadcast a transaction, and seed the content through the bittorrent protocol.
+Build your land by placing all content under `My Tile` game object’s hierarchy. If you change the root object's name from `My Tile` to anything else, other users will see it when they walk through your land. Once you are ready, select your tile in the object hierarchy, fill the coordinates of a tile you mined in the `Decentraland Editor` panel, and click on `Publish Tile`. This will serialize the tile content and push it to the node. The node will craft, sign and broadcast a transaction, and seed the content through the bittorrent protocol.
 
 There are some limitations on what you can do on your tile:
 
