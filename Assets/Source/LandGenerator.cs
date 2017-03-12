@@ -127,7 +127,6 @@ public class LandGenerator : MonoBehaviour {
 
 		if (string.IsNullOrEmpty(www.error)) {
 			RPCResponse response = JsonUtility.FromJson<RPCResponse>(www.text);
-			MeshRenderer planeRenderer = plane.GetComponent<MeshRenderer> ();
             Destroy(loader);
 			if (response.IsEmpty ()) {
                 // TODO: do empty behavior
@@ -140,11 +139,11 @@ public class LandGenerator : MonoBehaviour {
 				yield return www;
 
 				if (string.IsNullOrEmpty (www.error)) {
-					STile t = STile.FromBytes (www.bytes);
-					GameObject tileGO = t.ToInstance(pos);
-                    //tileGO.SetActive(false);
-					names.Add (index, t.GetName ());
-					//Destroy (plane);
+                    Debug.Log("Downloaded content for tile (" + index[0]+","+index[1]+")");
+					STile t = STile.FromBytes(www.bytes);
+					t.ToInstance(pos);
+					names.Add(index, t.GetName());
+					
 				} else {
 					Debug.Log("Can't fetch tile content! " + index + " " + www.error);
 				}

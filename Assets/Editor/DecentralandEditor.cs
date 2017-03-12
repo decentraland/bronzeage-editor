@@ -16,15 +16,16 @@ public class DecentralandEditor : EditorWindow
 
     private bool publishing = false;
     private bool publishError = false;
-
+    private bool published = false;
 
     [Header("Decentraland Editor")]
     string nodeAddress = "http://localhost:8301";
-	string nodeAuth = "bitcoinrpc:???????";
+    string nodeAuth = "";
 	int xOffset = 0;
 	int zOffset = 0;
 
-	[MenuItem("Window/Decentraland Editor")]
+
+    [MenuItem("Window/Decentraland Editor")]
 	public static void ShowWindow()
 	{
 		EditorWindow window = EditorWindow.GetWindow(typeof(DecentralandEditor));
@@ -81,7 +82,7 @@ public class DecentralandEditor : EditorWindow
         }
         else
         {
-            EditorGUILayout.HelpBox(publishing ? ("Publishing tile at (" + xOffset + "," + zOffset + ")") : "", MessageType.Info);
+            EditorGUILayout.HelpBox(publishing ? ("Publishing tile at (" + xOffset + "," + zOffset + ")") : (published?"Published!":""), MessageType.Info);
         }
         
     }
@@ -135,31 +136,27 @@ public class DecentralandEditor : EditorWindow
 		return position;
 	}
 
-	void PublishTile(Vector2 index, string content) {
-		Debug.Log ("==== Calling publish tile =====");
-		Debug.Log (index);
-		Debug.Log (content);
-
+    void PublishTile(Vector2 index, string content) {
         publishing = true;
         publishError = false;
+        published = false;
 
         // Basic Auth
         Dictionary<string,string> headers = new Dictionary<string, string>();
 		headers["Authorization"] = "Basic " + System.Convert.ToBase64String(
-			System.Text.Encoding.ASCII.GetBytes(nodeAuth));
+			System.Text.Encoding.ASCII.GetBytes("bitcoinrpc:"+nodeAuth));
 
 		string json = "{\"method\":\"settile\",\"params\":[" + index [0] + "," + index [1] + ",\"" + content + "\"],\"id\":0}";
 		byte[] data = System.Text.Encoding.ASCII.GetBytes(json.ToCharArray());
 
 		WWW www = new WWW(nodeAddress, data, headers);
 
-		while (!www.isDone) {
-//			WaitForSeconds (5);
-		}
+		while (!www.isDone) {} // busy wait
 
 		if (string.IsNullOrEmpty(www.error)) {
 			RPCResponse response = JsonUtility.FromJson<RPCResponse>(www.text);
-			Debug.Log("Published: " + response.result);
+            Debug.Log("Successfully published tile!");
+            published = true;
 		} else {
 			Debug.Log("Error publishing tile! " + www.error);
             publishError = true;

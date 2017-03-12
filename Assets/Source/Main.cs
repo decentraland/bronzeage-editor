@@ -58,7 +58,6 @@ public class STile {
 
         // Store Childs
         Bounds bounds = new Bounds(Vector3.zero, new Vector3(100, 100, 100));
-            //tile.GetComponent<Renderer>().bounds;
 		childs = new SObject[tile.transform.childCount];
 		int index = 0;
 		int childCount = 0;
@@ -76,6 +75,7 @@ public class STile {
 
 	public GameObject ToInstance(Vector3 position) {
 		GameObject go = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        go.name = this.name;
 		go.transform.localScale = new Vector3 (TILE_SCALE, TILE_SCALE, TILE_SCALE);
 		go.transform.position = position;
 
@@ -215,9 +215,7 @@ public class SObject {
 		}
 
 		MeshRenderer renderer = go.GetComponent<MeshRenderer>();
-        Debug.Log("Renderer material " + renderer.material);
 		renderer.material.color = this.color;
-        Debug.Log("COLOR:" + this.color);
 
 		if (this.texture != null) {
             Debug.Log("Texture set"); 
