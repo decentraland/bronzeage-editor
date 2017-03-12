@@ -11,13 +11,17 @@ There is no communication between browsers, so players will explore the world al
 
 
 ## World Editor
-To edit the Decentraland world you first need to become a land owner. Please [run a node](https://github.com/decentraland/decentraland-node) and mine some land.
 
-Once you own some land, you want to [download Unity](https://unity3d.com/get-unity/download), clone this repo and open the Unity project.
+The Decentraland world editor is a Unity3D plugin that connects to your local node and publishes changes you make to the land you own to the network.
 
-In Unity, open the *World Editor* Scene and include `Window -> Decentraland Editor` panel somewhere in your workspace. Make sure to fill your node address in the panel, in order to publish changes directly from the editor.
+### How to edit your tile's content
+To edit the Decentraland world you first need to own some land (one or more tiles). Please [run a node](https://github.com/decentraland/decentraland-node) with mining activated and wait until it mines some tiles. Take note on the coordinates of the tiles you own, as you will need them later. 
 
-Build your land by placing all content under `My Tile` game object’s hierarchy. Once you are ready, select your tile and click `Publish Tile` on the `Decentraland Editor` panel. This will serialize the tile content and push it to the node. The node will craft, sign and broadcast a transaction, and seed the scene file through the torrent protocol.
+While the miner is running, you'll want to [download Unity3D](https://unity3d.com/get-unity/download), clone this repo and open the project with Unity3D.
+
+In Unity, open the *World Editor* Scene (found in the Scenes folder) and include the Decentraland Editor (`Window -> Decentraland Editor`) panel somewhere in your workspace. Make sure to fill your node address and port in the panel, in order to publish changes directly from the editor.
+
+Build your land by placing all content under `My Tile` game object’s hierarchy. Once you are ready, select your tile in the object hierarchy, fill the coordinates of a tile you mined in the `Decentraland Editor` panel, and click on `Publish Tile`. This will serialize the tile content and push it to the node. The node will craft, sign and broadcast a transaction, and seed the content through the bittorrent protocol.
 
 There are some limitations on what you can do on your tile:
 
@@ -26,6 +30,8 @@ There are some limitations on what you can do on your tile:
 * Hard limit of 1024 game objects inside the tile.
 * Can’t place objects beyond the bounds of the tile.
 * Not yet supported: Scripts, Animations, Shaders, etc.
+
+Have fun!
 
 # Feedback and support
 For get help and give feebdack [join our slack](https://rauchg-slackin-ueglzmcnsv.now.sh/) and talk to the development team. You can also report bugs by [opening a github issue](https://github.com/decentraland/bronzeage-editor/issues/new).
