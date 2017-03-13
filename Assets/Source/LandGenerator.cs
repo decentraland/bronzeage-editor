@@ -115,7 +115,7 @@ public class LandGenerator : MonoBehaviour {
         GameObject loader = Instantiate(loading, pos, Quaternion.identity);
         loader.transform.position = new Vector3(pos.x, pos.y + 2, pos.z);
         string fileName = "" + index[0] + "." + index[1] + ".lnd";
-        WWW www = new WWW("http://s2.decentraland.org/tiles/" + fileName);
+        WWW www = new WWW("https://decentraland.org/content/" + fileName);
         yield return www;
 
         if (!string.IsNullOrEmpty(www.error))
