@@ -1,12 +1,23 @@
 ![](https://raw.githubusercontent.com/decentraland/web/gh-pages/img/banner.png)
 
-![Slack](https://rauchg-slackin-ueglzmcnsv.now.sh/badge.svg)
+## About
 
-# Decentraland
-Decentraland is an open-source initiative to build a decentralized virtual reality world. Blockchain technology is used to claim and transfer land, keeping a permanent record of ownership. [Try it now](https://decentraland.org/app/).
+Decentraland is an open-source initiative to build a shared virtual reality
+world. In Decentraland, the content of each piece of land is determined by its
+owner. You can become a land owner either by having someone transfer you some
+of their parcels, or by mining new land. A new parcel of land is mined every 10
+minutes.
 
+[Explore Decentraland](https://decentraland.org/app/)
+
+## Components
+
+* **Node**: An open and trustless land ownership record and scene content distribution network.
+* **Editor**: An easy to use 3D scene editor, that lets you publish scenes directly to any of your parcels.
+* **Browser**: A browser for navigating the virtual world of Decentraland.
 
 ## Decentraland Browser
+
 The browser is built using Unity and its amazing WebGL compilation, so it can run on every modern web browser.
 
 The player’s surroundings are instantiated at runtime. This is done by fetching the file content of each tile from a Decentraland node.
@@ -19,7 +30,7 @@ There is no communication between browsers, so players will explore the world al
 The Decentraland world editor is a Unity3D plugin that connects to your local node and publishes changes you make to the land you own to the network.
 
 ### How to edit your tile's content
-To edit the Decentraland world you first need to own some land (one or more tiles). Please [run a node](https://github.com/decentraland/decentraland-node) with mining activated and wait until it mines some tiles. Take note on the coordinates of the tiles you own, as you will need them later. 
+To edit the Decentraland world you first need to own some land (one or more tiles). Please [run a node](https://github.com/decentraland/decentraland-node) with mining activated and wait until it mines some tiles. Take note on the coordinates of the tiles you own, as you will need them later.
 
 While the miner is running, you'll want to [download Unity3D](https://unity3d.com/get-unity/download), clone this repo and open the project with Unity3D.
 
