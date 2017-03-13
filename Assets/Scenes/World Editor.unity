@@ -132,7 +132,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4372989381242172, guid: 8bf8e60811d15cd45b7753ea172af054, type: 2}
       propertyPath: m_LocalScale.x
-      value: 40
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4372989381242172, guid: 8bf8e60811d15cd45b7753ea172af054, type: 2}
       propertyPath: m_LocalScale.y
@@ -140,7 +140,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4372989381242172, guid: 8bf8e60811d15cd45b7753ea172af054, type: 2}
       propertyPath: m_LocalScale.z
-      value: 40
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1755224605657166, guid: 8bf8e60811d15cd45b7753ea172af054, type: 2}
+      propertyPath: m_Name
+      value: Terrain
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8bf8e60811d15cd45b7753ea172af054, type: 2}

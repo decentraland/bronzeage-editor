@@ -11,12 +11,12 @@ using System.Runtime.Serialization.Formatters.Binary;
 public class STile {
 	public static float TILE_SCALE = 4;
 	public static float TILE_SIZE = TILE_SCALE * 10;
-	public static int MAX_CHILDS = 1024;
+	public static int MAX_CHILDREN = 1024;
 
 	string name = "";
 	Color color = Color.white;
 	byte[] texture = null;
-	SObject[] childs;
+	SObject[] children;
 
 	public static STile FromFile(string path){
 		FileStream file = File.Open (path, FileMode.Open);
@@ -56,20 +56,20 @@ public class STile {
 		// Store Local Transform
 		this.name = tile.name;
 
-        // Store Childs
+        // Store children
         Bounds bounds = new Bounds(Vector3.zero, new Vector3(100, 100, 100));
-		childs = new SObject[tile.transform.childCount];
+		children = new SObject[tile.transform.childCount];
 		int index = 0;
 		int childCount = 0;
 		foreach (Transform t in tile.transform) {
 			SObject child = new SObject(t.gameObject, bounds);
-			childs [index++] = child;
+			children [index++] = child;
 			childCount += child.ObjectCount();
 		}
 
 		// Check Max Child Objects
-		if (childCount > MAX_CHILDS) {
-			throw new SerializationException ("Tail contains too many game objects (MAX " + MAX_CHILDS +")");
+		if (childCount > MAX_CHILDREN) {
+			throw new SerializationException ("Tail contains too many game objects (MAX " + MAX_CHILDREN +")");
 		}
 	}
 
@@ -90,9 +90,9 @@ public class STile {
 
 		int objCount = 0;
 		Bounds bounds = go.GetComponent<Renderer>().bounds;
-		foreach (SObject child in this.childs) {
+		foreach (SObject child in this.children) {
 			// Check Object Count
-			if (objCount >= MAX_CHILDS) { return go;}
+			if (objCount >= MAX_CHILDREN) { return go;}
 			objCount = child.ToInstance(go, bounds, objCount);
 		}
 
@@ -130,7 +130,7 @@ public class SObject {
 	Vector3 scale = new Vector3(0,0,0);
 	Color color = Color.white;
 	byte[] texture = null;
-	SObject[] childs;
+	SObject[] children;
 
 	private static bool IsInBoundaries(GameObject go, Bounds bounds) {
 		Bounds goBounds = go.GetComponent<Renderer>().bounds;
@@ -186,16 +186,16 @@ public class SObject {
 		}
 
 		// Serialize children
-		childs = new SObject[go.transform.childCount];
+		children = new SObject[go.transform.childCount];
 		int index = 0;
 		foreach (Transform t in go.transform) {
-			childs [index++] = new SObject(t.gameObject, bounds);
+			children [index++] = new SObject(t.gameObject, bounds);
 		}
 	}
 
 	public int ObjectCount() {
 		int count = 1;
-		foreach (SObject child in this.childs) {
+		foreach (SObject child in this.children) {
 			count += child.ObjectCount ();
 		}
 		return count;
@@ -218,16 +218,15 @@ public class SObject {
 		renderer.material.color = this.color;
 
 		if (this.texture != null) {
-            Debug.Log("Texture set"); 
 			Texture2D tex = new Texture2D (2, 2);
 			tex.LoadImage (this.texture);
 			renderer.material.mainTexture = tex;
 		}
 
 		objCount++;
-		foreach (SObject child in childs) {
+		foreach (SObject child in children) {
 			// Check Object Count
-			if (objCount >= STile.MAX_CHILDS) { return objCount; }
+			if (objCount >= STile.MAX_CHILDREN) { return objCount; }
 			objCount = child.ToInstance(go, bounds, objCount);
 		}
 
