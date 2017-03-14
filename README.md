@@ -16,18 +16,30 @@ minutes.
 * **Editor**: An easy to use 3D scene editor, that lets you publish scenes directly to any of your parcels.
 * **Browser**: A browser for navigating the virtual world of Decentraland.
 
-## Decentraland Browser
+## Unity Project
 
-The browser is built using Unity and its amazing WebGL compilation, so it can run on every modern web browser.
+This [Unity](https://unity3d.com/) project has two scenes, one that lets you
+explore the virtual world, used as the base for compiling the browser, and
+another of an empty land parcel, that you can edit and publish to a piece of
+land you own.
 
-The player’s surroundings are instantiated at runtime. This is done by fetching the file content of each tile from a Decentraland node.
+# Browser
 
-There is no communication between browsers, so players will explore the world alone. Multiplayer support will be added on the next major release (*Iron Age*), we'd love to hear your comments on how to implement it.
+The browser fetches and renders the user's immediate surroundings as she moves
+through the Decentraland virtual world. The 3D scene content is provided by a
+node's [land content
+server](https://github.com/decentraland/bronzeage-node#land-content-server).
 
+The browser is built using [Unity](https://unity3d.com/), targeting WebGL, so
+it can run on every modern web browser. There's still no communication between
+browsers, so players will explore the world alone. Multiplayer support will be
+added on the next major release (Iron Age). We'd love to hear your comments on
+how to implement it!
 
-## World Editor
+# Editor
 
-The Decentraland world editor is a Unity3D plugin that connects to your local node and publishes changes you make to the land you own to the network.
+The world editor is a Unity3D plugin that connects to your local Decentraland
+node and can publish changes you make to your land.
 
 ### How to edit your tile's content
 To edit the Decentraland world you first need to own some land (one or more tiles). Please [run a node](https://github.com/decentraland/decentraland-node) with mining activated and wait until it mines some tiles. Take note on the coordinates of the tiles you own, as you will need them later.
