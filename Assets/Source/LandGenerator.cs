@@ -3,7 +3,6 @@
 using System.Runtime.Serialization;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 
 public class LandGenerator : MonoBehaviour {
 
@@ -105,48 +104,55 @@ public class LandGenerator : MonoBehaviour {
 		float z = (index [1] * TILE_SIZE);
 		return new Vector3 (x, 0, z);
 	}
+    
+	IEnumerator FetchTile(Vector2 index) {
+		Vector3 pos = indexToPosition (index);
 
-    IEnumerator FetchTile(Vector2 index)
-    {
-        Vector3 pos = indexToPosition(index);
-
-        // Temporal Placeholder
+		// Temporal Placeholder
         GameObject plane = Instantiate(baseTile, pos, Quaternion.identity);
         GameObject loader = Instantiate(loading, pos, Quaternion.identity);
         loader.transform.position = new Vector3(pos.x, pos.y + 2, pos.z);
-        string fileName = "" + index[0] + "." + index[1] + ".lnd";
-        WWW www = new WWW("https://decentraland.org/content/" + fileName);
-        yield return www;
 
-        if (!string.IsNullOrEmpty(www.error))
-        {
+        // Basic Auth
+        Dictionary<string,string> headers = new Dictionary<string, string>();
+		headers["Authorization"] = "Basic " + System.Convert.ToBase64String(
+			System.Text.Encoding.ASCII.GetBytes("bitcoinrpc:38Dpwnjsj2zn3QETJ6GKv8YkHomA"));
 
-            Debug.Log("Can't fetch tile content! " + index + " " + www.error);
-            names.Add(index, "Unclaimed Land");
+		// JSON Data
+		string json = "{\"method\":\"gettile\",\"params\":[" + index [0] + "," + index [1] + "],\"id\":0}";
+		byte[] data = System.Text.Encoding.ASCII.GetBytes(json.ToCharArray());
+
+		WWW www = new WWW("https://decentraland.org/api", data, headers);
+		yield return www;
+
+		if (string.IsNullOrEmpty(www.error)) {
+			RPCResponse response = JsonUtility.FromJson<RPCResponse>(www.text);
             Destroy(loader);
-        }
-        else
-        {
-            Debug.Log("Downloaded content for tile (" + index[0] + "," + index[1] + ")");
-            try
-            {
+			if (response.IsEmpty ()) {
+                // TODO: do empty behavior
+			} else if (response.IsUnmined ()) {
+				names.Add(index, "Unclaimed Land");
+			} else if (response.HasData()) {
+				// Download tile content
+				string fileName = "" + index [0] + "." + index [1] + ".lnd";
+				www = new WWW("https://decentraland.org/content/tile/" + fileName);
+				yield return www;
 
-                STile t = STile.FromBytes(www.bytes);
-                t.ToInstance(pos);
-                names.Add(index, t.GetName());
-                Destroy(loader);
+				if (string.IsNullOrEmpty (www.error)) {
+                    Debug.Log("Downloaded content for tile (" + index[0]+","+index[1]+")");
+					STile t = STile.FromBytes(www.bytes);
+					t.ToInstance(pos);
+					names.Add(index, t.GetName());
+					
+				} else {
+					Debug.Log("Can't fetch tile content! " + index + " " + www.error);
+				}
+			}
 
-            }
-            catch (EndOfStreamException e)
-            {
-                Debug.Log("Invalid" + index + e.ToString());
-            }
-            catch (SerializationException e)
-            {
-                Debug.Log("Invalid" + index + e.ToString());
-            }
-        }
-    }
+		} else {
+			Debug.Log("Error on RPC call 'gettile': " + www.error);
+		}
+	}
 }
 
 [System.Serializable]
