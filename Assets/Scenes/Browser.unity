@@ -622,9 +622,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   songs:
-  - {fileID: 8300000, guid: b166b3e162288f34ea7b35b56dfa1c3a, type: 3}
-  - {fileID: 8300000, guid: 2e1d9cb61d15b114bbc615320d6c9f47, type: 3}
-  - {fileID: 8300000, guid: 82fa37c2bd063f34b8728e232fcd02ec, type: 3}
   - {fileID: 8300000, guid: 1af3b42926b7ff8459eaa2b440c58eaa, type: 3}
   musicVolume: 0.7
 --- !u!45 &1905461739
