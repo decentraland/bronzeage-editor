@@ -116,13 +116,13 @@ public class LandGenerator : MonoBehaviour {
         // Basic Auth
         Dictionary<string,string> headers = new Dictionary<string, string>();
 		headers["Authorization"] = "Basic " + System.Convert.ToBase64String(
-			System.Text.Encoding.ASCII.GetBytes("bitcoinrpc:38Dpwnjsj2zn3QETJ6GKv8YkHomA"));
+			System.Text.Encoding.ASCII.GetBytes("bitcoinrpc:38Dpwnjsj1zn3QETJ6GKv8YkHomA"));
 
 		// JSON Data
 		string json = "{\"method\":\"gettile\",\"params\":[" + index [0] + "," + index [1] + "],\"id\":0}";
 		byte[] data = System.Text.Encoding.ASCII.GetBytes(json.ToCharArray());
 
-		WWW www = new WWW("https://decentraland.org/api", data, headers);
+		WWW www = new WWW("http://s1.decentraland.org:8301", data, headers);
 		yield return www;
 
 		if (string.IsNullOrEmpty(www.error)) {
@@ -135,7 +135,7 @@ public class LandGenerator : MonoBehaviour {
 			} else if (response.HasData()) {
 				// Download tile content
 				string fileName = "" + index [0] + "." + index [1] + ".lnd";
-				www = new WWW("https://decentraland.org/content/tile/" + fileName);
+				www = new WWW("http://s1.decentraland.org:9301/tile/" + fileName);
 				yield return www;
 
 				if (string.IsNullOrEmpty (www.error)) {
