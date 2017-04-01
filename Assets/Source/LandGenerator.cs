@@ -3,16 +3,17 @@
 using System.Runtime.Serialization;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 public class LandGenerator : MonoBehaviour {
 
 	public GameObject player;
 	public GameObject borderBox;
-    public GameObject baseTile;
-    public GameObject loading;
+	public GameObject baseTile;
+	public GameObject loading;
 
 
-    private static float TILE_SCALE = 4;
+	private static float TILE_SCALE = 4;
 	private static float TILE_SIZE = TILE_SCALE * 10;
 
 	private Dictionary<Vector2, bool> world = new Dictionary<Vector2, bool>();
@@ -49,13 +50,12 @@ public class LandGenerator : MonoBehaviour {
 		return new Vector2(0, 0);
 	}
 
-
 	// This function creates planes for adjacent enviroment
 	void CreateEnvironment(Vector3 position) {
 		Vector2 current = GetCurrentPlane(player.transform.position);
 
 		// Update Border Box
-        
+
 		if (current != currentTile) {
 			borderBox.transform.position = indexToPosition (current);
 			currentTile = current;
@@ -151,53 +151,45 @@ public class LandGenerator : MonoBehaviour {
 		float z = (index [1] * TILE_SIZE);
 		return new Vector3 (x, 0, z);
 	}
-    
+
 	IEnumerator FetchTile(Vector2 index) {
-		Vector3 pos = indexToPosition (index);
+		Vector3 pos = indexToPosition(index);
 
 		// Temporal Placeholder
-        GameObject plane = Instantiate(baseTile, pos, Quaternion.identity);
-        GameObject loader = Instantiate(loading, pos, Quaternion.identity);
-        loader.transform.position = new Vector3(pos.x, pos.y + 2, pos.z);
-
-        // Basic Auth
-        Dictionary<string,string> headers = new Dictionary<string, string>();
-		headers["Authorization"] = "Basic " + System.Convert.ToBase64String(
-			System.Text.Encoding.ASCII.GetBytes("bitcoinrpc:38Dpwnjsj1zn3QETJ6GKv8YkHomA"));
-
-		// JSON Data
-		string json = "{\"method\":\"gettile\",\"params\":[" + index [0] + "," + index [1] + "],\"id\":0}";
-		byte[] data = System.Text.Encoding.ASCII.GetBytes(json.ToCharArray());
-
-		WWW www = new WWW("http://s1.decentraland.org:8301", data, headers);
+		GameObject plane = Instantiate(baseTile, pos, Quaternion.identity);
+		GameObject loader = Instantiate(loading, pos, Quaternion.identity);
+		loader.transform.position = new Vector3(pos.x, pos.y + 2, pos.z);
+		string fileName = "" + index[0] + "." + index[1] + ".lnd";
+		WWW www = new WWW("https://decentraland.org/content/" + fileName);
 		yield return www;
 
-		if (string.IsNullOrEmpty(www.error)) {
-			RPCResponse response = JsonUtility.FromJson<RPCResponse>(www.text);
-            Destroy(loader);
-			if (response.IsEmpty ()) {
-                // TODO: do empty behavior
-			} else if (response.IsUnmined ()) {
-				names.Add(index, "Unclaimed Land");
-			} else if (response.HasData()) {
-				// Download tile content
-				string fileName = "" + index [0] + "." + index [1] + ".lnd";
-				www = new WWW("http://s1.decentraland.org:9301/tile/" + fileName);
-				yield return www;
+		if (!string.IsNullOrEmpty(www.error))
+		{
 
-				if (string.IsNullOrEmpty (www.error)) {
-                    Debug.Log("Downloaded content for tile (" + index[0]+","+index[1]+")");
-					STile t = STile.FromBytes(www.bytes);
-					t.ToInstance(pos);
-					names.Add(index, t.GetName());
-					
-				} else {
-					Debug.Log("Can't fetch tile content! " + index + " " + www.error);
-				}
+			Debug.Log("Can't fetch tile content! " + index + " " + www.error);
+			names.Add(index, "Unclaimed Land");
+			Destroy(loader);
+		}
+		else
+		{
+			Debug.Log("Downloaded content for tile (" + index[0] + "," + index[1] + ")");
+			try
+			{
+
+				STile t = STile.FromBytes(www.bytes);
+				t.ToInstance(pos);
+				names.Add(index, t.GetName());
+				Destroy(loader);
+
 			}
-
-		} else {
-			Debug.Log("Error on RPC call 'gettile': " + www.error);
+			catch (EndOfStreamException e)
+			{
+				Debug.Log("Invalid" + index + e.ToString());
+			}
+			catch (SerializationException e)
+			{
+				Debug.Log("Invalid" + index + e.ToString());
+			}
 		}
 	}
 }
