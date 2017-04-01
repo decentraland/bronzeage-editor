@@ -19,12 +19,31 @@ public class LandGenerator : MonoBehaviour {
 	private Dictionary<Vector2, string> names = new Dictionary<Vector2, string>();
 	private Dictionary<Vector2, bool> visited = new Dictionary<Vector2, bool>();
 
-	private Vector2 currentTile = new Vector2(0, 0);
+	private Vector2 currentTile;
 
 	// Use this for initialization
 	void Start () {
-		CreatePlaneAt (new Vector2 (0, 0));
+		currentTile = GetInitialPosition (Application.absoluteURL);
+		player.transform.position = indexToPosition (currentTile);
+		CreatePlaneAt (currentTile);
 	}
+
+	// Get initial position from url querystring
+	Vector2 GetInitialPosition(string url) {
+		if (url.Length > 0) {
+			char[] querySplit = { '=', '&' };
+			string[] parts = url.Split (querySplit);
+			if (parts.Length >= 4) {
+				try {
+					int x = int.Parse (parts[1]);
+					int y = int.Parse (parts[3]);
+					return new Vector2 (x, y);
+				} catch {}
+			}
+		}
+		return new Vector2(0, 0);
+	}
+
 
 	// This function creates planes for adjacent enviroment
 	void CreateEnvironment(Vector3 position) {
