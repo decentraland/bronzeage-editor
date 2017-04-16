@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System;
 
 public class LandGenerator : MonoBehaviour {
 
@@ -151,8 +152,6 @@ public class LandGenerator : MonoBehaviour {
 				STile t = STile.FromBytes(www.bytes);
 				t.ToInstance(pos);
 				names.Add(index, t.GetName());
-				Destroy(loader);
-
 			}
 			catch (EndOfStreamException e)
 			{
@@ -162,6 +161,14 @@ public class LandGenerator : MonoBehaviour {
 			{
 				Debug.Log("Invalid" + index + e.ToString());
 			}
+            		catch (Exception e)
+            		{
+                		Debug.Log("Exception found in " + index + e.ToString());
+            		}
+            		finally
+            		{
+                		Destroy(loader);
+            		}
 		}
 	}
 }
