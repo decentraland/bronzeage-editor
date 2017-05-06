@@ -5,7 +5,7 @@
 Decentraland is an open-source initiative to build a shared virtual reality
 world. In Decentraland, the content of each piece of land is determined by its
 owner. You can become a land owner either by having someone transfer you some
-of their parcels, or by mining new land. A new parcel of land is mined every 10
+of their tiles, or by mining new land. A new tile of land is mined every 10
 minutes.
 
 [Explore Decentraland](https://decentraland.org/app/)
@@ -13,14 +13,14 @@ minutes.
 ## Components
 
 * **Node**: An open and trustless land ownership record and scene content distribution network.
-* **Editor**: An easy to use 3D scene editor, that lets you publish scenes directly to any of your parcels.
+* **Editor**: An easy to use 3D scene editor, that lets you publish scenes directly to any of your tiles.
 * **Browser**: A browser for navigating the virtual world of Decentraland.
 
 ## Unity Project
 
 This [Unity](https://unity3d.com/) project has two scenes, one that lets you
 explore the virtual world, used as the base for compiling the browser, and
-another of an empty land parcel, that you can edit and publish to a piece of
+another of an empty land tile, that you can edit and publish to a piece of
 land you own.
 
 # Browser
