@@ -21,10 +21,15 @@ public class LandGenerator : MonoBehaviour {
 
 	private Vector2 currentTile;
 
+	private string posX = "0";
+	private string posZ = "0";
+
 	// Use this for initialization
 	void Start () {
 		currentTile = GetInitialPosition (Application.absoluteURL);
 		player.transform.position = indexToPosition (currentTile);
+		posZ = indexToPosition (currentTile).z.ToString ();
+		posX = indexToPosition(currentTile).x.ToString ();
 		CreatePlaneAt (currentTile);
 	}
 
@@ -116,6 +121,29 @@ public class LandGenerator : MonoBehaviour {
 		if (!names.TryGetValue (currentTile, out tileName)) tileName = "Empty Land";
 		string message = tileName + " (" + currentTile [0] + ":" + currentTile [1] + ")";
 		GUI.Label (new Rect (10, 10, 200, 20), message);
+
+		GUI.Box (new Rect (Screen.width - 105,5,100,120), "Teleportation");
+
+
+		posX = GUI.TextField (new Rect (Screen.width - 85,35,60,20), posX.ToString());
+		posZ = GUI.TextField (new Rect (Screen.width - 85,65,60, 20), posZ.ToString());
+		if (GUI.Button (new Rect (Screen.width - 85, 95, 60, 20), "Teleport!")) {
+			int valueX;
+			bool successX = int.TryParse(posX, out valueX);
+
+			int valueZ;
+			bool successZ = int.TryParse(posZ, out valueZ);
+			if (successX && successZ) {
+
+
+				player.transform.position = indexToPosition (new Vector2 ((float)valueX, (float)valueZ));
+				posZ = valueZ.ToString ();
+				posX = valueX.ToString ();
+				CreatePlaneAt (new Vector2 ((float)valueX, (float)valueZ));
+			} else {
+				Debug.Log ("Error parsing int");
+			}
+		}
 	}
 
 	private Vector3 indexToPosition(Vector2 index) {
