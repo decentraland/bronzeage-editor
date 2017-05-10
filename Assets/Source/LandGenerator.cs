@@ -127,7 +127,7 @@ public class LandGenerator : MonoBehaviour {
 
 		posX = GUI.TextField (new Rect (Screen.width - 85,35,60,20), posX.ToString());
 		posZ = GUI.TextField (new Rect (Screen.width - 85,65,60, 20), posZ.ToString());
-		if (GUI.Button (new Rect (Screen.width - 85, 95, 60, 20), "Teleport!")) {
+		if (GUI.Button (new Rect (Screen.width - 85, 95, 60, 20), "Teleport!") || Input.GetKeyDown("T")) {
 			int valueX;
 			bool successX = int.TryParse(posX, out valueX);
 
