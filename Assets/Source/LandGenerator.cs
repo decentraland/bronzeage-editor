@@ -3,18 +3,16 @@
 using System.Runtime.Serialization;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System;
 
 public class LandGenerator : MonoBehaviour {
 
 	public GameObject player;
 	public GameObject borderBox;
-	public GameObject baseTile;
-	public GameObject loading;
+    public GameObject baseTile;
+    public GameObject loading;
 
 
-	private static float TILE_SCALE = 4;
+    private static float TILE_SCALE = 4;
 	private static float TILE_SIZE = TILE_SCALE * 10;
 
 	private Dictionary<Vector2, bool> world = new Dictionary<Vector2, bool>();
@@ -23,10 +21,15 @@ public class LandGenerator : MonoBehaviour {
 
 	private Vector2 currentTile;
 
+	private string posX = "0";
+	private string posZ = "0";
+
 	// Use this for initialization
 	void Start () {
 		currentTile = GetInitialPosition (Application.absoluteURL);
 		player.transform.position = indexToPosition (currentTile);
+		posZ = indexToPosition (currentTile).z.ToString ();
+		posX = indexToPosition(currentTile).x.ToString ();
 		CreatePlaneAt (currentTile);
 	}
 
@@ -46,12 +49,13 @@ public class LandGenerator : MonoBehaviour {
 		return new Vector2(0, 0);
 	}
 
+
 	// This function creates planes for adjacent enviroment
 	void CreateEnvironment(Vector3 position) {
 		Vector2 current = GetCurrentPlane(player.transform.position);
 
 		// Update Border Box
-
+        
 		if (current != currentTile) {
 			borderBox.transform.position = indexToPosition (current);
 			currentTile = current;
@@ -117,6 +121,29 @@ public class LandGenerator : MonoBehaviour {
 		if (!names.TryGetValue (currentTile, out tileName)) tileName = "Empty Land";
 		string message = tileName + " (" + currentTile [0] + ":" + currentTile [1] + ")";
 		GUI.Label (new Rect (10, 10, 200, 20), message);
+
+		GUI.Box (new Rect (Screen.width - 105,5,100,120), "Teleportation");
+
+
+		posX = GUI.TextField (new Rect (Screen.width - 85,35,60,20), posX.ToString());
+		posZ = GUI.TextField (new Rect (Screen.width - 85,65,60, 20), posZ.ToString());
+		if (GUI.Button (new Rect (Screen.width - 85, 95, 60, 20), "Teleport!") || Input.GetKeyDown("T")) {
+			int valueX;
+			bool successX = int.TryParse(posX, out valueX);
+
+			int valueZ;
+			bool successZ = int.TryParse(posZ, out valueZ);
+			if (successX && successZ) {
+
+
+				player.transform.position = indexToPosition (new Vector2 ((float)valueX, (float)valueZ));
+				posZ = valueZ.ToString ();
+				posX = valueX.ToString ();
+				CreatePlaneAt (new Vector2 ((float)valueX, (float)valueZ));
+			} else {
+				Debug.Log ("Error parsing int");
+			}
+		}
 	}
 
 	private Vector3 indexToPosition(Vector2 index) {
@@ -124,51 +151,53 @@ public class LandGenerator : MonoBehaviour {
 		float z = (index [1] * TILE_SIZE);
 		return new Vector3 (x, 0, z);
 	}
-
+    
 	IEnumerator FetchTile(Vector2 index) {
-		Vector3 pos = indexToPosition(index);
+		Vector3 pos = indexToPosition (index);
 
 		// Temporal Placeholder
-		GameObject plane = Instantiate(baseTile, pos, Quaternion.identity);
-		GameObject loader = Instantiate(loading, pos, Quaternion.identity);
-		loader.transform.position = new Vector3(pos.x, pos.y + 2, pos.z);
-		string fileName = "" + index[0] + "." + index[1] + ".lnd";
-		WWW www = new WWW("https://decentraland.org/content/" + fileName);
+        GameObject plane = Instantiate(baseTile, pos, Quaternion.identity);
+        GameObject loader = Instantiate(loading, pos, Quaternion.identity);
+        loader.transform.position = new Vector3(pos.x, pos.y + 2, pos.z);
+
+        // Basic Auth
+        Dictionary<string,string> headers = new Dictionary<string, string>();
+		headers["Authorization"] = "Basic " + System.Convert.ToBase64String(
+			System.Text.Encoding.ASCII.GetBytes("bitcoinrpc:38Dpwnjsj1zn3QETJ6GKv8YkHomA"));
+
+		// JSON Data
+		string json = "{\"method\":\"gettile\",\"params\":[" + index [0] + "," + index [1] + "],\"id\":0}";
+		byte[] data = System.Text.Encoding.ASCII.GetBytes(json.ToCharArray());
+
+		WWW www = new WWW("http://s1.decentraland.org:8301", data, headers);
 		yield return www;
 
-		if (!string.IsNullOrEmpty(www.error))
-		{
+		if (string.IsNullOrEmpty(www.error)) {
+			RPCResponse response = JsonUtility.FromJson<RPCResponse>(www.text);
+            Destroy(loader);
+			if (response.IsEmpty ()) {
+                // TODO: do empty behavior
+			} else if (response.IsUnmined ()) {
+				names.Add(index, "Unclaimed Land");
+			} else if (response.HasData()) {
+				// Download tile content
+				string fileName = "" + index [0] + "." + index [1] + ".lnd";
+				www = new WWW("http://s1.decentraland.org:9301/tile/" + fileName);
+				yield return www;
 
-			Debug.Log("Can't fetch tile content! " + index + " " + www.error);
-			names.Add(index, "Unclaimed Land");
-			Destroy(loader);
-		}
-		else
-		{
-			Debug.Log("Downloaded content for tile (" + index[0] + "," + index[1] + ")");
-			try
-			{
+				if (string.IsNullOrEmpty (www.error)) {
+                    Debug.Log("Downloaded content for tile (" + index[0]+","+index[1]+")");
+					STile t = STile.FromBytes(www.bytes);
+					t.ToInstance(pos);
+					names.Add(index, t.GetName());
+					
+				} else {
+					Debug.Log("Can't fetch tile content! " + index + " " + www.error);
+				}
+			}
 
-				STile t = STile.FromBytes(www.bytes);
-				t.ToInstance(pos);
-				names.Add(index, t.GetName());
-			}
-			catch (EndOfStreamException e)
-			{
-				Debug.Log("Invalid" + index + e.ToString());
-			}
-			catch (SerializationException e)
-			{
-				Debug.Log("Invalid" + index + e.ToString());
-			}
-            		catch (Exception e)
-            		{
-                		Debug.Log("Exception found in " + index + e.ToString());
-            		}
-            		finally
-            		{
-                		Destroy(loader);
-            		}
+		} else {
+			Debug.Log("Error on RPC call 'gettile': " + www.error);
 		}
 	}
 }
