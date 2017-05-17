@@ -30,3 +30,5 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+Assets/Scenes/Manu.unity
+Assets/Scenes/Manu.unity.meta
