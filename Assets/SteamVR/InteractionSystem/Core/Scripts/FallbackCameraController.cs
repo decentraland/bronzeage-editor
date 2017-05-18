@@ -25,6 +25,7 @@ namespace Valve.VR.InteractionSystem
 		void OnEnable()
 		{
 			realTime = Time.realtimeSinceStartup;
+            
 		}
 
 
