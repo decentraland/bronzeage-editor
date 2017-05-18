@@ -1,5 +1,9 @@
 ![](https://raw.githubusercontent.com/decentraland/web/gh-pages/img/banner.png)
 
+## Serve Content
+ C:\Python27\python.exe -m SimpleHTTPServer 8080
+ 
+
 ## About
 
 Decentraland is an open-source initiative to build a shared virtual reality

@@ -147,7 +147,7 @@ public class LandGenerator : MonoBehaviour
         GameObject plane = Instantiate(baseTile, pos, Quaternion.identity);
         GameObject loader = Instantiate(loading, pos, Quaternion.identity);
         loader.transform.position = new Vector3(pos.x, pos.y + 2, pos.z);
-        string fileName = "http://localhost/content/" + index[0] + "." + index[1] + ".lnd";
+        string fileName = "http://localhost:8080/content/" + index[0] + "." + index[1] + ".lnd";
         Debug.Log(fileName);
         WWW www = new WWW(fileName);
         yield return www;

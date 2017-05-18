@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17157854, g: 0.21382383, b: 0.28210235, a: 1}
+  m_IndirectSpecularColor: {r: 0.18362822, g: 0.22787777, b: 0.2980492, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -25041,6 +25041,7 @@ GameObject:
   - component: {fileID: 1950248113}
   - component: {fileID: 1950248112}
   - component: {fileID: 1950248111}
+  - component: {fileID: 1950248115}
   - component: {fileID: 1950248110}
   m_Layer: 0
   m_Name: VRCamera
@@ -25067,8 +25068,7 @@ Transform:
 --- !u!114 &1950248110
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114000012530188460, guid: dc06161b6d97feb419f45f03b62e14b9,
-    type: 2}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1950248108}
   m_Enabled: 1
@@ -25142,6 +25142,14 @@ Camera:
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
   m_StereoMirrorMode: 0
+--- !u!45 &1950248115
+Skybox:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1950248108}
+  m_Enabled: 1
+  m_CustomSkybox: {fileID: 2100000, guid: ff330f6226d1d44838ee63a8824f8def, type: 2}
 --- !u!1 &1955308061
 GameObject:
   m_ObjectHideFlags: 0
