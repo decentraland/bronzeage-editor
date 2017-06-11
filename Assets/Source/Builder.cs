@@ -1,18 +1,34 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class Builder : MonoBehaviour {
+
+	public enum Mode {
+		control, edit
+	};
 
 	public GameObject tool;
 	public GameObject floor;
 	public GameObject parent;
+	public GameObject character;
 
-	public Material m1;
-	public Material m2;
-	public Material m3;
+	public FirstPersonController fpc;
+	public GameObject controller;
 
-	public static float CUBE_SIZE = 0.5f;
+	private Mode mode;
+
+	public Material[] materials;
+	public float CUBE_SIZE = 0.5f;
+	bool deleting = false;
+
+	private GameObject pivot;
+	private Material pivot_material;
+
+	void Awake() {
+		SetMode(Mode.edit);
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -26,6 +42,118 @@ public class Builder : MonoBehaviour {
 		}
 	}
 
+	void Update () {
+		if (Input.GetKeyDown (KeyCode.Escape)) {
+			ToggleMode ();
+		}
+
+		if (mode == Mode.edit) {
+			EditMode();
+		}
+	}
+
+	private void SetMode(Mode mode) {
+		bool isEdit = mode == Mode.edit;
+		this.mode = mode;
+		Cursor.visible = ! isEdit;
+		fpc.enabled = isEdit;
+		controller.SetActive (! isEdit);
+	}
+
+	private void ToggleMode(){
+		if (mode == Mode.control) {
+			SetMode (Mode.edit);
+		} else {
+			SetMode (Mode.control);
+		}
+	}
+
+	private void EditMode() {
+		SetToolBindings();
+		Ray ray = new Ray(character.transform.position, character.transform.forward);
+		RaycastHit hit;
+
+		if (deleting) {
+			HideTool();
+
+			if (Physics.Raycast (character.transform.position, character.transform.forward, out hit, 8)) {
+				GameObject target = hit.transform.gameObject;
+
+				if (pivot == null) {
+					pivot = target;
+				}
+
+				if (IsSameObject(pivot, target)) {
+					pivot.GetComponent<MeshRenderer> ().material = null;
+				} else {
+					pivot.GetComponent<MeshRenderer> ().material = pivot_material;
+					pivot_material = target.GetComponent<MeshRenderer> ().material;
+					pivot = target;
+				}
+
+				if (Input.GetMouseButtonDown(0)) {
+					Destroy(target);
+				}
+			}
+		} else {
+			if (Physics.Raycast (character.transform.position, character.transform.forward, out hit, 8)) {
+				tool.transform.localScale = new Vector3(CUBE_SIZE, CUBE_SIZE, CUBE_SIZE);
+				tool.transform.position = hit.transform.position + (hit.normal * CUBE_SIZE);
+				tool.transform.rotation = hit.transform.rotation;
+			} else {
+				HideTool();
+			}
+
+			if (Input.GetMouseButtonDown(0)) {
+				GameObject cube = CreateCube (tool.transform.position);
+				cube.transform.parent = parent.transform;
+			}
+		}
+	}
+
+	private bool IsSameObject(GameObject a, GameObject b) {
+		return a.GetInstanceID() == b.GetInstanceID();
+	}
+
+	// Tool
+
+	private void HideTool() {
+		tool.transform.position = new Vector3 (0, -10, 0);
+	}
+
+	private void ToggleToolAction() {
+		deleting = ! deleting;
+	}
+
+	private void SetToolBindings() {
+		if (Input.GetKeyDown(KeyCode.M)) {
+			CUBE_SIZE += 0.1f;
+		}
+
+		if (Input.GetKeyDown(KeyCode.N)) {
+			CUBE_SIZE -= 0.1f;
+		}
+
+		if (Input.GetKeyDown(KeyCode.Alpha1)) {
+			tool.GetComponent<MeshRenderer> ().material = materials[0];
+		}
+
+		if (Input.GetKeyDown(KeyCode.Alpha2)) {
+			tool.GetComponent<MeshRenderer> ().material = materials[1];
+		}
+
+		if (Input.GetKeyDown(KeyCode.Alpha3)) {
+			tool.GetComponent<MeshRenderer> ().material = materials[2];
+		}
+
+		if (Input.GetKeyDown(KeyCode.Alpha4)) {
+			tool.GetComponent<MeshRenderer> ().material = materials[3];
+		}
+
+		if (Input.GetKeyDown(KeyCode.Alpha0)) {
+			ToggleToolAction();
+		}
+	}
 
 	private GameObject CreateCube(Vector3 position) {
 		GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -33,34 +161,5 @@ public class Builder : MonoBehaviour {
 		go.transform.localScale = new Vector3 (CUBE_SIZE, CUBE_SIZE, CUBE_SIZE);
 		go.GetComponent<MeshRenderer> ().material = tool.GetComponent<MeshRenderer> ().material;
 		return go;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		if (Input.GetMouseButtonDown (0)) {
-			GameObject cube = CreateCube (tool.transform.position);
-			cube.transform.parent = parent.transform;
-		}
-
-		RaycastHit hit;
-		if (Physics.Raycast (transform.position, transform.forward, out hit, 4)) {
-			tool.transform.position = hit.transform.position + (hit.normal * CUBE_SIZE);
-			tool.transform.rotation = hit.transform.rotation;
-		} else {
-			tool.transform.position = new Vector3 (0, -10, 0);
-		}
-
-		if (Input.GetKeyDown(KeyCode.Alpha1)) {
-			tool.GetComponent<MeshRenderer> ().material = m1;
-		}
-
-		if (Input.GetKeyDown(KeyCode.Alpha2)) {
-			tool.GetComponent<MeshRenderer> ().material = m2;
-		}
-
-		if (Input.GetKeyDown(KeyCode.Alpha3)) {
-			tool.GetComponent<MeshRenderer> ().material = m3;
-		}
-
 	}
 }
