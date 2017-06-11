@@ -26,11 +26,12 @@ public class Builder : MonoBehaviour {
 	private GameObject pivot;
 	private Material pivot_material;
 
+	// Lifecycle
+
 	void Awake() {
 		SetMode(Mode.edit);
 	}
 
-	// Use this for initialization
 	void Start () {
 		float cubes = floor.transform.localScale.x / CUBE_SIZE / 2;
 		for (float i = -cubes ; i < cubes; i++) {
@@ -52,21 +53,7 @@ public class Builder : MonoBehaviour {
 		}
 	}
 
-	private void SetMode(Mode mode) {
-		bool isEdit = mode == Mode.edit;
-		this.mode = mode;
-		Cursor.visible = ! isEdit;
-		fpc.enabled = isEdit;
-		controller.SetActive (! isEdit);
-	}
-
-	private void ToggleMode(){
-		if (mode == Mode.control) {
-			SetMode (Mode.edit);
-		} else {
-			SetMode (Mode.control);
-		}
-	}
+	// Modes
 
 	private void EditMode() {
 		SetToolBindings();
@@ -111,8 +98,20 @@ public class Builder : MonoBehaviour {
 		}
 	}
 
-	private bool IsSameObject(GameObject a, GameObject b) {
-		return a.GetInstanceID() == b.GetInstanceID();
+	private void ToggleMode(){
+		if (mode == Mode.control) {
+			SetMode (Mode.edit);
+		} else {
+			SetMode (Mode.control);
+		}
+	}
+
+	private void SetMode(Mode mode) {
+		bool isEdit = mode == Mode.edit;
+		this.mode = mode;
+		Cursor.visible = ! isEdit;
+		fpc.enabled = isEdit;
+		controller.SetActive (! isEdit);
 	}
 
 	// Tool
@@ -155,11 +154,17 @@ public class Builder : MonoBehaviour {
 		}
 	}
 
+	// GameObjects
+
 	private GameObject CreateCube(Vector3 position) {
 		GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		go.transform.position = position;
 		go.transform.localScale = new Vector3 (CUBE_SIZE, CUBE_SIZE, CUBE_SIZE);
 		go.GetComponent<MeshRenderer> ().material = tool.GetComponent<MeshRenderer> ().material;
 		return go;
+	}
+
+	private bool IsSameObject(GameObject a, GameObject b) {
+		return a.GetInstanceID() == b.GetInstanceID();
 	}
 }
