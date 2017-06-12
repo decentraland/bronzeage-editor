@@ -20,6 +20,7 @@ public class ChatSystem : MonoBehaviour {
     public DebugValues DebuggingVariables;
     public GameObject player;
 
+    private float lastTime = 0;
     private MumbleClient _mumbleClient;
     public string HostName = "1.2.3.4";
     public int Port = 64738;
@@ -122,8 +123,13 @@ public class ChatSystem : MonoBehaviour {
         }
     }
 	void Update () {
-        if (player != null && player.transform != null && player.transform.position != null && _mumbleClient != null) {
-            _mumbleClient.SendTextMessage("!POS:" + this.player.transform.position.x + "," + this.player.transform.position.y + "," + this.player.transform.position.z, "Root");
+        if (Time.time - lastTime > 0.1)
+        {
+            lastTime = Time.time;
+            if (player != null && player.transform != null && player.transform.position != null && _mumbleClient != null)
+            {
+                _mumbleClient.SendUnreliableTextMessage("!POS:" + this.player.transform.position.x + "," + this.player.transform.position.y + "," + this.player.transform.position.z, "Root");
+            }
         }
 	}
 }

@@ -20,13 +20,13 @@ public class MusicPlayer : MonoBehaviour
 
     void Update()
     {
-        if (!GetComponent<AudioSource>().isPlaying)
+        /* if (!GetComponent<AudioSource>().isPlaying)
         {
             float r = Random.value;
             index = (int)(r * songs.Length);
             GetComponent<AudioSource>().clip = songs[index];
             GetComponent<AudioSource>().Play();
-        }
+        } */
     }
 
     public void PauseMusic()

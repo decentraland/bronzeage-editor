@@ -112,7 +112,7 @@ namespace Mumble
         {
             lock (_ssl)
             {
-                if(mt != MessageType.Ping && mt != MessageType.UDPTunnel)
+                if(mt != MessageType.Ping && mt != MessageType.UDPTunnel && mt != MessageType.TextMessage)
                     Debug.Log("Sending " + mt + " message");
                 //_writer.Write(IPAddress.HostToNetworkOrder((Int16) mt));
                 //Serializer.SerializeWithLengthPrefix(_ssl, message, PrefixStyle.Fixed32BigEndian);
@@ -246,11 +246,11 @@ namespace Mumble
                         TextMessage textMessage = Serializer.DeserializeWithLengthPrefix<TextMessage>(_ssl,
                             PrefixStyle.Fixed32BigEndian);
                         
-                        Debug.Log("Text message = " + textMessage.message);
-                        Debug.Log("Text actor = " + textMessage.actor);
+                        // Debug.Log("Text message = " + textMessage.message);
+                        // Debug.Log("Text actor = " + textMessage.actor);
                         //Debug.Log("Text channel = " + textMessage.channel_id[0]);
-                        Debug.Log("Text session Length = " + textMessage.session.Count);
-                        Debug.Log("Text Tree Length = " + textMessage.tree_id.Count);
+                        // Debug.Log("Text session Length = " + textMessage.session.Count);
+                        // Debug.Log("Text Tree Length = " + textMessage.tree_id.Count);
                         if (this._messageListener != null) {
                             this._messageListener(textMessage);
                         }

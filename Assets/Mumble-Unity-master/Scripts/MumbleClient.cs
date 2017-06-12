@@ -58,6 +58,7 @@ namespace Mumble
         private readonly Dictionary<string, ChannelState> Channels = new Dictionary<string, ChannelState>();
         private readonly Dictionary<UInt32, AudioDecodingBuffer> _audioDecodingBuffers = new Dictionary<uint, AudioDecodingBuffer>();
         private readonly Dictionary<UInt32, MumbleAudioPlayer> _mumbleAudioPlayers = new Dictionary<uint, MumbleAudioPlayer>();
+        private string username;
 
         internal UserState OurUserState { get; private set; }
         internal Version RemoteVersion { get; set; }
@@ -129,6 +130,10 @@ namespace Mumble
                 AllUsers[newUserState.session] = newUserState;
                 AudioDecodingBuffer buffer = new AudioDecodingBuffer(_codec);
                 _audioDecodingBuffers.Add(newUserState.session, buffer);
+
+                if (newUserState.name == username) {
+                    return;
+                }
                 EventProcessor.Instance.QueueEvent(() =>
                 {
                     // We also create a new audio player for each user
@@ -168,6 +173,7 @@ namespace Mumble
         }
         public void Connect(string username, string password)
         {
+            this.username = username;
             _tcpConnection.StartClient(username, password);
         }
         internal void ConnectUdp()
@@ -188,8 +194,21 @@ namespace Mumble
             };
             msg.channel_id.Add(OurUserState.channel_id);
             msg.actor = ServerSync.session;
-            Debug.Log("Now session length = " + msg.session.Count);
 
+            _tcpConnection.SendMessage(MessageType.TextMessage, msg);
+        }
+        public void SendUnreliableTextMessage(string textMessage, string channel)
+        {
+            var msg = new TextMessage
+            {
+                message = textMessage,
+            };
+            msg.channel_id.Add(OurUserState.channel_id);
+            msg.actor = ServerSync.session;
+
+            if (msg.session.Count > 0) {
+                return;
+            }
             _tcpConnection.SendMessage(MessageType.TextMessage, msg);
         }
         public void SendVoicePacket(PcmArray floatData)
