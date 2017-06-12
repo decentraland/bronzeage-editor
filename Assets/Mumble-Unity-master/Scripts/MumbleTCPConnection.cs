@@ -14,6 +14,8 @@ using Version = MumbleProto.Version;
 
 namespace Mumble
 {
+    public delegate void MessageListener(TextMessage message);
+    
     public class MumbleTcpConnection
     {
         private readonly UpdateOcbServerNonce _updateOcbServerNonce;
@@ -31,6 +33,7 @@ namespace Mumble
         private Thread _processThread;
         private string _username;
         private string _password;
+        private MessageListener _messageListener;
 
         internal MumbleTcpConnection(IPEndPoint host, string hostname, UpdateOcbServerNonce updateOcbServerNonce,
             MumbleUdpConnection udpConnection, MumbleClient mumbleClient)
@@ -46,6 +49,11 @@ namespace Mumble
             {
                 IsBackground = true
             };
+        }
+
+        public void SetMessageListener(MessageListener listener)
+        {
+            this._messageListener = listener;
         }
 
         internal void StartClient(string username, string password)
@@ -243,6 +251,9 @@ namespace Mumble
                         //Debug.Log("Text channel = " + textMessage.channel_id[0]);
                         Debug.Log("Text session Length = " + textMessage.session.Count);
                         Debug.Log("Text Tree Length = " + textMessage.tree_id.Count);
+                        if (this._messageListener != null) {
+                            this._messageListener(textMessage);
+                        }
                         break;
                     case MessageType.UDPTunnel:
                         var length = IPAddress.NetworkToHostOrder(_reader.ReadInt32());

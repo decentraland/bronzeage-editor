@@ -203,6 +203,10 @@ Prefab:
       propertyPath: m_PlayOnAwake
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8200000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
+      propertyPath: spreadCustomCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
   m_IsPrefabParent: 0
@@ -431,7 +435,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1197115096}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b144e088fe99844ab62b024defdc34b, type: 3}
+  m_Script: {fileID: 11500000, guid: c3914c97566d61b42a47739cfdbefc6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MyMumbleAudioPlayerPrefab: {fileID: 1000010552747926, guid: 66a0e01ce72c0c14ca680da28d8f9903,
@@ -442,9 +446,10 @@ MonoBehaviour:
     UseLocalLoopback: 0
     UseSyntheticSource: 0
     EnableEditorIOGraph: 0
+  player: {fileID: 1515792454}
   HostName: murmur.decentraland.org
   Port: 64738
-  Username: john
+  Username: ExampleUser
   Password: 
   ChannelToJoin: decentraland
 --- !u!114 &1197115099

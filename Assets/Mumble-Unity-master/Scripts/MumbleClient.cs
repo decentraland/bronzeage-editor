@@ -49,6 +49,7 @@ namespace Mumble
         private readonly MumbleUdpConnection _udpConnection;
         private readonly ManageAudioSendBuffer _manageSendBuffer;
         private MumbleMicrophone _mumbleMic;
+        private MessageListener _messageListener;
         private readonly AudioPlayerCreatorMethod _audioPlayerCreator;
         private readonly AudioPlayerRemoverMethod _audioPlayerDestroyer;
 
@@ -77,7 +78,7 @@ namespace Mumble
         public const uint Minor = 2;
         public const uint Patch = 8;
 
-        public MumbleClient(string hostName, int port, AudioPlayerCreatorMethod createMumbleAudioPlayerMethod, AudioPlayerRemoverMethod removeMumbleAudioPlayerMethod, DebugValues debugVals=null)
+        public MumbleClient(string hostName, int port, AudioPlayerCreatorMethod createMumbleAudioPlayerMethod, AudioPlayerRemoverMethod removeMumbleAudioPlayerMethod, MessageListener listener, DebugValues debugVals=null)
         {
             IPAddress[] addresses = Dns.GetHostAddresses(hostName);
             if (addresses.Length == 0)
@@ -90,6 +91,7 @@ namespace Mumble
             var host = new IPEndPoint(addresses[0], port);
             _udpConnection = new MumbleUdpConnection(host, this);
             _tcpConnection = new MumbleTcpConnection(host, hostName, _udpConnection.UpdateOcbServerNonce, _udpConnection, this);
+            _tcpConnection.SetMessageListener(listener);
             _udpConnection.SetTcpConnection(_tcpConnection);
             _audioPlayerCreator = createMumbleAudioPlayerMethod;
             _audioPlayerDestroyer = removeMumbleAudioPlayerMethod;
