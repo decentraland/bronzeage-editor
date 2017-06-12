@@ -132,13 +132,13 @@ AudioSource:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 1
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0
     - serializedVersion: 2
-      time: 0.14917128
-      value: 0
+      time: 0.12766401
+      value: 0.99638367
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -181,6 +181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   newPosition: {x: 0, y: 0, z: 0}
+  easenessFactor: 0.1
 --- !u!114 &114255255294165818
 MonoBehaviour:
   m_ObjectHideFlags: 1
