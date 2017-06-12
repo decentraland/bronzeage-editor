@@ -42,7 +42,7 @@ namespace Mumble
         /// These are NOT! Multithread safe, as they can call Unity functions
         /// </summary>
         /// <returns></returns>
-        public delegate MumbleAudioPlayer AudioPlayerCreatorMethod();
+        public delegate MumbleAudioPlayer AudioPlayerCreatorMethod(string userName);
         public delegate void AudioPlayerRemoverMethod(MumbleAudioPlayer audioPlayerToRemove);
 
         private readonly MumbleTcpConnection _tcpConnection;
@@ -132,7 +132,7 @@ namespace Mumble
                 EventProcessor.Instance.QueueEvent(() =>
                 {
                     // We also create a new audio player for each user
-                    MumbleAudioPlayer newPlayer = _audioPlayerCreator();
+                    MumbleAudioPlayer newPlayer = _audioPlayerCreator(newUserState.name);
                     _mumbleAudioPlayers.Add(newUserState.session, newPlayer);
                     newPlayer.Initialize(this, newUserState.session);
                 });
@@ -180,7 +180,7 @@ namespace Mumble
             _udpConnection.Close();
             _manageSendBuffer.Dispose();
         }
-        public void SendTextMessage(string textMessage)
+        public void SendTextMessage(string textMessage, string channel)
         {
             var msg = new TextMessage
             {
@@ -252,6 +252,10 @@ namespace Mumble
         public byte[] GetLatestClientNonce()
         {
             return _udpConnection.GetLatestClientNonce();
+        }
+        public string GetUserName(uint id)
+        {
+            return AllUsers[id].name;
         }
         public static int GetNearestSupportedSampleRate(int listedRate)
         {

@@ -438,7 +438,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3914c97566d61b42a47739cfdbefc6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MyMumbleAudioPlayerPrefab: {fileID: 1000010552747926, guid: 66a0e01ce72c0c14ca680da28d8f9903,
+  MyMumbleAudioPlayerPrefab: {fileID: 1548625006529290, guid: cf8fa3dccf2481043bf3594b28a3dd13,
     type: 2}
   MyMumbleMic: {fileID: 1160403528}
   DebuggingVariables:
