@@ -123,7 +123,7 @@ public class ChatSystem : MonoBehaviour {
         }
     }
 	void Update () {
-        if (Time.time - lastTime > 0.1)
+        if (Time.time - lastTime > 0.2)
         {
             lastTime = Time.time;
             if (player != null && player.transform != null && player.transform.position != null && _mumbleClient != null)

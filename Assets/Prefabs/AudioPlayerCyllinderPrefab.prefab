@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4000010084468806}
   - component: {fileID: 114000010544730294}
   - component: {fileID: 82000010868889810}
+  - component: {fileID: 114594208293964744}
   m_Layer: 0
   m_Name: AudioPlayerCyllinderPrefab
   m_TagString: Untagged
@@ -179,6 +180,12 @@ AudioSource:
       inSlope: 0
       outSlope: 0
       tangentMode: 0
+    - serializedVersion: 2
+      time: 0.09677325
+      value: 1.0043463
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
@@ -218,3 +225,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Gain: 1
+--- !u!114 &114594208293964744
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010552747926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91d254be86b52f44cb02b8a53d4810b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newPosition: {x: 0, y: 0, z: 0}
+  easenessFactor: 0.95
