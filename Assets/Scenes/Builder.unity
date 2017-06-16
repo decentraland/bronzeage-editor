@@ -409,7 +409,7 @@ GameObject:
   - component: {fileID: 269374449}
   - component: {fileID: 269374448}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Cheatsheet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -431,8 +431,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -419.09998, y: 327}
-  m_SizeDelta: {x: -864.4, y: -670.7}
+  m_AnchoredPosition: {x: -378.2, y: 303.7}
+  m_SizeDelta: {x: -782.6, y: -624.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &269374448
 MonoBehaviour:
@@ -1642,8 +1642,6 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'Publish: <Esc>
 
-    Resize: <N>/<M>
-
     Toggle delete: <Number 0>'
 --- !u!222 &1203339488
 CanvasRenderer:
@@ -1992,7 +1990,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1243018605330104, guid: b0ac2fae71c3a464782678c0adc6c959, type: 2}
       propertyPath: m_Name
-      value: WorkingTile
+      value: My Tile
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b0ac2fae71c3a464782678c0adc6c959, type: 2}
@@ -2611,7 +2609,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1852383518}
   m_Layer: 0
-  m_Name: WorkingTile
+  m_Name: My Tile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

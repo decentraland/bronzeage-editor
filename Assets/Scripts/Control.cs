@@ -24,7 +24,7 @@ public class Control : MonoBehaviour {
 	public InputField input_y;
 
 	public void OnSubmit() {
-		GameObject tile = GameObject.Find("WorkingTile");
+		GameObject tile = GameObject.Find("My Tile");
  		STile original = new STile (tile);
 
 		// Compute index

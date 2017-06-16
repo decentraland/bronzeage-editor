@@ -125,14 +125,6 @@ public class Builder : MonoBehaviour {
 	}
 
 	private void SetToolBindings() {
-		if (Input.GetKeyDown(KeyCode.M)) {
-			CUBE_SIZE += 0.1f;
-		}
-
-		if (Input.GetKeyDown(KeyCode.N)) {
-			CUBE_SIZE -= 0.1f;
-		}
-
 		if (Input.GetKeyDown(KeyCode.Alpha1)) {
 			tool.GetComponent<MeshRenderer> ().material = materials[0];
 		}
