@@ -219,3 +219,10 @@ public class RPCResponse {
 		return !(this.IsEmpty () || this.IsUnmined ());
 	}
 }
+
+
+[System.Serializable]
+public class APIResponse {
+	public int x;
+	public int y;
+}
