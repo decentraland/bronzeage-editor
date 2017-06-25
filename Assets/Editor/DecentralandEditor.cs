@@ -9,25 +9,23 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
 
-public class DecentralandEditor : EditorWindow
-{
+public class DecentralandEditor : EditorWindow {
 	private static float TILE_SCALE = 4;
 	private static float TILE_SIZE = TILE_SCALE * 10;
 
-    private bool publishing = false;
-    private bool publishError = false;
-    private bool published = false;
+	private bool publishing = false;
+	private bool publishError = false;
+	private bool published = false;
 
-    [Header("Decentraland Editor")]
-    string nodeAddress = "http://localhost:8301";
-    string nodeAuth = "";
+	[Header("Decentraland Editor")]
+	string nodeAddress = "http://localhost:8301";
+	string nodeAuth = "";
 	int xOffset = 0;
 	int zOffset = 0;
 
 
-    [MenuItem("Window/Decentraland Editor")]
-	public static void ShowWindow()
-	{
+	[MenuItem("Window/Decentraland Editor")]
+	public static void ShowWindow() {
 		EditorWindow window = EditorWindow.GetWindow(typeof(DecentralandEditor));
 		window.titleContent = new GUIContent ("Decentraland");
 	}
@@ -36,27 +34,25 @@ public class DecentralandEditor : EditorWindow
 		Repaint();
 	}
 
-	void OnGUI()
-	{
+	void OnGUI() {
 		GameObject tile = Selection.activeGameObject;
 
-		if (!tile) {
-            EditorGUILayout.HelpBox("Select a tile in the hierarchy view to enable Decentraland tile uploader.", MessageType.Warning);
+		if (! tile) {
+			EditorGUILayout.HelpBox("Select a tile in the hierarchy view to enable Decentraland tile uploader.", MessageType.Warning);
 			return;
 		}
 
-        GUILayout.Label("\n");
-        GUILayout.Label("Configuration\n");
+		GUILayout.Label("\n");
+		GUILayout.Label("Configuration\n");
 
-        nodeAddress = EditorGUILayout.TextField ("Your Node RPC URL", nodeAddress);
+		nodeAddress = EditorGUILayout.TextField ("Your Node RPC URL", nodeAddress);
 		nodeAuth = EditorGUILayout.TextField ("Node RPC Auth Token", nodeAuth);
-		
 
-        GUILayout.Label("\n");
-        GUILayout.Label("\n");
-        GUILayout.Label("Editor\n");
-        EditorGUILayout.BeginHorizontal();
-        GUILayout.Label("Tile Coordinates");
+		GUILayout.Label("\n");
+		GUILayout.Label("\n");
+		GUILayout.Label("Editor\n");
+		EditorGUILayout.BeginHorizontal();
+		GUILayout.Label("Tile Coordinates");
 		GUILayout.Label("X");
 		xOffset = EditorGUILayout.IntField (xOffset);
 		GUILayout.Label("Y");
@@ -71,21 +67,19 @@ public class DecentralandEditor : EditorWindow
 				(tile.transform.position.x / TILE_SIZE) + xOffset,
 				(tile.transform.position.z / TILE_SIZE) + zOffset
 			);
+
 			string content = original.ToBase64();
 
-            PublishTile(index, content);
+			PublishTile(index, content);
 		}
 
-        if (publishError)
-        {
-            EditorGUILayout.HelpBox("Error publishing tile!", MessageType.Error);
-        }
-        else
-        {
-            EditorGUILayout.HelpBox(publishing ? ("Publishing tile at (" + xOffset + "," + zOffset + ")") : (published?"Published!":""), MessageType.Info);
-        }
-        
-    }
+		if (publishError) {
+			EditorGUILayout.HelpBox("Error publishing tile!", MessageType.Error);
+		} else {
+			EditorGUILayout.HelpBox(publishing ? ("Publishing tile at (" + xOffset + "," + zOffset + ")") : (published?"Published!":""), MessageType.Info);
+		}
+
+	}
 
 	private void CreateEmtpy(Vector3 position) {
 		GameObject go = GameObject.CreatePrimitive(PrimitiveType.Plane);
@@ -136,32 +130,33 @@ public class DecentralandEditor : EditorWindow
 		return position;
 	}
 
-    void PublishTile(Vector2 index, string content) {
-        publishing = true;
-        publishError = false;
-        published = false;
+	void PublishTile(Vector2 index, string content) {
+		publishing = true;
+		publishError = false;
+		published = false;
 
-        // Basic Auth
-        Dictionary<string,string> headers = new Dictionary<string, string>();
+		// Basic Auth
+		Dictionary<string,string> headers = new Dictionary<string, string>();
 		headers["Authorization"] = "Basic " + System.Convert.ToBase64String(
-			System.Text.Encoding.ASCII.GetBytes("bitcoinrpc:"+nodeAuth));
+		System.Text.Encoding.ASCII.GetBytes("bitcoinrpc:"+nodeAuth));
 
 		string json = "{\"method\":\"settile\",\"params\":[" + index [0] + "," + index [1] + ",\"" + content + "\"],\"id\":0}";
 		byte[] data = System.Text.Encoding.ASCII.GetBytes(json.ToCharArray());
 
 		WWW www = new WWW(nodeAddress, data, headers);
 
-		while (!www.isDone) {} // busy wait
+		while (! www.isDone) {} // busy wait
 
 		if (string.IsNullOrEmpty(www.error)) {
 			RPCResponse response = JsonUtility.FromJson<RPCResponse>(www.text);
-            Debug.Log("Successfully published tile!");
-            published = true;
+			Debug.Log("Successfully published tile!");
+			published = true;
 		} else {
 			Debug.Log("Error publishing tile! " + www.error);
-            publishError = true;
+			publishError = true;
 		}
-        publishing = false;
-    }
+
+		publishing = false;
+	}
 
 }

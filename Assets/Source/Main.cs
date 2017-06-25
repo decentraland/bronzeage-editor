@@ -57,10 +57,11 @@ public class STile {
 		this.name = tile.name;
 
         // Store children
-        Bounds bounds = new Bounds(Vector3.zero, new Vector3(100, 100, 100));
+    Bounds bounds = new Bounds(Vector3.zero, new Vector3(100, 100, 100));
 		children = new SObject[tile.transform.childCount];
 		int index = 0;
 		int childCount = 0;
+
 		foreach (Transform t in tile.transform) {
 			SObject child = new SObject(t.gameObject, bounds);
 			children [index++] = child;
@@ -75,7 +76,7 @@ public class STile {
 
 	public GameObject ToInstance(Vector3 position) {
 		GameObject go = GameObject.CreatePrimitive(PrimitiveType.Plane);
-        go.name = this.name;
+    go.name = this.name;
 		go.transform.localScale = new Vector3 (TILE_SCALE, TILE_SCALE, TILE_SCALE);
 		go.transform.position = position;
 
