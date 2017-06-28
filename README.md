@@ -1,4 +1,4 @@
-![](https://raw.githubusercontent.com/decentraland/web/gh-pages/img/banner.png)
+![](https://raw.githubusercontent.com/decentraland/web/gh-pages/img/decentraland.ico)
 
 ## About
 
@@ -61,7 +61,7 @@ There are some limitations on what you can do on your tile:
 Have fun!
 
 # Feedback and support
-For get help and give feedback [join our slack](https://rauchg-slackin-ueglzmcnsv.now.sh/) and talk to the development team. You can also report bugs by [opening a github issue](https://github.com/decentraland/bronzeage-editor/issues/new).
+For get help and give feedback [join our slack](https://slack.decentraland.org/) and talk to the development team. You can also report bugs by [opening a github issue](https://github.com/decentraland/bronzeage-editor/issues/new).
 
 
 # Music Credits
