@@ -1,0 +1,174 @@
+fileFormatVersion: 2
+guid: 11249347e64fdd74988216d1fd18d9c0
+timeCreated: 1496855124
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: CYLINDER01
+    100004: Cylinder01
+    100006: CYLINDER02
+    100008: CYLINDER03
+    100010: CYLINDER04
+    100012: CYLINDER05
+    100014: CYLINDER06
+    100016: CYLINDER07
+    100018: Line01
+    100020: Line02
+    100022: RECTANGL01
+    100024: RECTANGL02
+    100026: RECTANGL03
+    100028: RECTANGL04
+    100030: RECTANGL05
+    100032: RECTANGL06
+    100034: RECTANGL07
+    100036: TUBE01
+    100038: TUBE02
+    400000: //RootNode
+    400002: CYLINDER01
+    400004: Cylinder01
+    400006: CYLINDER02
+    400008: CYLINDER03
+    400010: CYLINDER04
+    400012: CYLINDER05
+    400014: CYLINDER06
+    400016: CYLINDER07
+    400018: Line01
+    400020: Line02
+    400022: RECTANGL01
+    400024: RECTANGL02
+    400026: RECTANGL03
+    400028: RECTANGL04
+    400030: RECTANGL05
+    400032: RECTANGL06
+    400034: RECTANGL07
+    400036: TUBE01
+    400038: TUBE02
+    2300000: CYLINDER01
+    2300002: Cylinder01
+    2300004: CYLINDER02
+    2300006: CYLINDER03
+    2300008: CYLINDER04
+    2300010: CYLINDER05
+    2300012: CYLINDER06
+    2300014: CYLINDER07
+    2300016: Line01
+    2300018: Line02
+    2300020: RECTANGL01
+    2300022: RECTANGL02
+    2300024: RECTANGL03
+    2300026: RECTANGL04
+    2300028: RECTANGL05
+    2300030: RECTANGL06
+    2300032: RECTANGL07
+    2300034: TUBE01
+    2300036: TUBE02
+    3300000: CYLINDER01
+    3300002: Cylinder01
+    3300004: CYLINDER02
+    3300006: CYLINDER03
+    3300008: CYLINDER04
+    3300010: CYLINDER05
+    3300012: CYLINDER06
+    3300014: CYLINDER07
+    3300016: Line01
+    3300018: Line02
+    3300020: RECTANGL01
+    3300022: RECTANGL02
+    3300024: RECTANGL03
+    3300026: RECTANGL04
+    3300028: RECTANGL05
+    3300030: RECTANGL06
+    3300032: RECTANGL07
+    3300034: TUBE01
+    3300036: TUBE02
+    4300000: RECTANGL01
+    4300002: TUBE01
+    4300004: TUBE02
+    4300006: CYLINDER01
+    4300008: CYLINDER02
+    4300010: CYLINDER03
+    4300012: CYLINDER04
+    4300014: CYLINDER05
+    4300016: CYLINDER06
+    4300018: RECTANGL02
+    4300020: RECTANGL03
+    4300022: RECTANGL04
+    4300024: RECTANGL05
+    4300026: RECTANGL06
+    4300028: RECTANGL07
+    4300030: CYLINDER07
+    4300032: Line01
+    4300034: Cylinder01
+    4300036: Line02
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
