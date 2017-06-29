@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 065a3f32f15eafa4c8ade8c33a885e9d
+guid: a8a42388d4bc5f14d93acd5739b62b6c
 labels:
 - Beach
 - Ground
@@ -8,6 +8,7 @@ labels:
 - Sand
 - Terrain
 NativeFormatImporter:
+  mainObjectFileID: -1
   userData: 
   assetBundleName: 
   assetBundleVariant: 
