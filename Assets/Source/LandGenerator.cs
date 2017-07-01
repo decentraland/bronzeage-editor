@@ -14,8 +14,8 @@ public class LandGenerator : MonoBehaviour {
 	public GameObject loading;
 
 
-	private static float TILE_SCALE = 4;
-	private static float TILE_SIZE = TILE_SCALE * 10;
+	private static float TILE_SCALE = 1;
+	private static float TILE_SIZE = TILE_SCALE * 40;
 
 	private Dictionary<Vector2, bool> world = new Dictionary<Vector2, bool>();
 	private Dictionary<Vector2, string> names = new Dictionary<Vector2, string>();

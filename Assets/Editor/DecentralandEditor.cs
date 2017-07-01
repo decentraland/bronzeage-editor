@@ -10,8 +10,8 @@ using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
 
 public class DecentralandEditor : EditorWindow {
-	private static float TILE_SCALE = 4;
-	private static float TILE_SIZE = TILE_SCALE * 10;
+	private static float TILE_SCALE = 1;
+	private static float TILE_SIZE = TILE_SCALE * 40;
 
 	private bool publishing = false;
 	private bool publishError = false;

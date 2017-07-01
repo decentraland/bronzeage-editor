@@ -9,8 +9,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 [System.Serializable]
 public class STile {
-	public static float TILE_SCALE = 4;
-	public static float TILE_SIZE = TILE_SCALE * 10;
+	public static float TILE_SCALE = 1;
+	public static float TILE_SIZE = TILE_SCALE * 40;
 	public static int MAX_CHILDREN = 1024;
 
 	string name = "";
