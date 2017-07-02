@@ -1,3 +1,4 @@
+
 ﻿using UnityEngine;
 
 using System.Runtime.Serialization;
@@ -38,6 +39,12 @@ public class LandGenerator : MonoBehaviour
 
         CreatePlaneAt(currentTile);
     }
+  /*void Start()
+    {
+        currentTile = GetInitialPosition(Application.absoluteURL);
+        player.transform.position = indexToPosition(currentTile);
+        CreatePlaneAt(currentTile);
+    }*/
 
     // Get initial position from url querystring
     Vector2 GetInitialPosition(string url)
