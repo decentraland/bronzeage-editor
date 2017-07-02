@@ -15,7 +15,7 @@ public class LandGenerator : MonoBehaviour {
 
 
 	private static float TILE_SCALE = 1;
-	private static float TILE_SIZE = TILE_SCALE * 40;
+	private static float TILE_SIZE = 40;
 
 	private Dictionary<Vector2, bool> world = new Dictionary<Vector2, bool>();
 	private Dictionary<Vector2, string> names = new Dictionary<Vector2, string>();
@@ -123,12 +123,12 @@ public class LandGenerator : MonoBehaviour {
 		string message = tileName + " (" + currentTile [0] + ":" + currentTile [1] + ")";
 		GUI.Label (new Rect (10, 10, 200, 20), message);
 
-		GUI.Box (new Rect (Screen.width - 105,5,100,120), "Teleportation");
+		/* GUI.Box (new Rect (Screen.width - 105,5,100,120), "Teleportation");
 
 
 		posX = GUI.TextField (new Rect (Screen.width - 85,35,60,20), posX.ToString());
 		posZ = GUI.TextField (new Rect (Screen.width - 85,65,60, 20), posZ.ToString());
-		if (GUI.Button (new Rect (Screen.width - 85, 95, 60, 20), "Teleport!") || Input.GetKeyDown("T")) {
+		if (GUI.Button (new Rect (Screen.width - 85, 95, 60, 20), "Go") || Input.GetKeyDown(KeyCode.T)) {
 			int valueX;
 			bool successX = int.TryParse(posX, out valueX);
 
@@ -144,7 +144,7 @@ public class LandGenerator : MonoBehaviour {
 			} else {
 				Debug.Log ("Error parsing int");
 			}
-		}
+		}*/
 	}
 
 	private Vector3 indexToPosition(Vector2 index) {
@@ -189,14 +189,14 @@ public class LandGenerator : MonoBehaviour {
 			{
 				Debug.Log("Invalid" + index + e.ToString());
 			}
-            		catch (Exception e)
-            		{
-                		Debug.Log("Exception found in " + index + e.ToString());
-            		}
-            		finally
-            		{
-                		Destroy(loader);
-            		}
+            catch (Exception e)
+            {
+                Debug.Log("Exception found in " + index + e.ToString());
+            }
+            finally
+            {
+                Destroy(loader);
+            }
 		}
 	}
 }

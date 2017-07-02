@@ -10,8 +10,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 [System.Serializable]
 public class STile {
 	public static float TILE_SCALE = 1;
-	public static float TILE_SIZE = TILE_SCALE * 40;
-	public static int MAX_CHILDREN = 1024;
+    public static float TILE_SIZE = 40;
+    public static float CHECK_BOUND = 8;
+    public static int MAX_CHILDREN = 1024;
 
 	string name = "";
 	Color color = Color.white;
@@ -57,7 +58,7 @@ public class STile {
 		this.name = tile.name;
 
         // Store children
-    Bounds bounds = new Bounds(Vector3.zero, new Vector3(100, 100, 100));
+        Bounds bounds = new Bounds(Vector3.zero, new Vector3(40, 40, 40));
 		children = new SObject[tile.transform.childCount];
 		int index = 0;
 		int childCount = 0;
@@ -76,8 +77,8 @@ public class STile {
 
 	public GameObject ToInstance(Vector3 position) {
 		GameObject go = GameObject.CreatePrimitive(PrimitiveType.Plane);
-    go.name = this.name;
-		go.transform.localScale = new Vector3 (TILE_SCALE, TILE_SCALE, TILE_SCALE);
+        go.name = this.name;
+		go.transform.localScale = new Vector3(CHECK_BOUND, CHECK_BOUND, CHECK_BOUND);
 		go.transform.position = position;
 
 		MeshRenderer renderer = go.GetComponent<MeshRenderer>();
@@ -95,9 +96,10 @@ public class STile {
 			// Check Object Count
 			if (objCount >= MAX_CHILDREN) { return go;}
 			objCount = child.ToInstance(go, bounds, objCount);
-		}
+        }
+        go.transform.localScale = new Vector3(TILE_SCALE, TILE_SCALE, TILE_SCALE);
 
-		return go;
+        return go;
 	}
 
 	public string GetName() {
@@ -125,7 +127,8 @@ public class STile {
 [System.Serializable]
 public class SObject {
 
-	PrimitiveType mesh = PrimitiveType.Cube;
+    public static float CHECK_BOUND = 8;
+    PrimitiveType mesh = PrimitiveType.Cube;
 	Vector3 position = new Vector3(0,0,0);
 	Vector3 angles = new Vector3(0,0,0);
 	Vector3 scale = new Vector3(0,0,0);
@@ -139,8 +142,8 @@ public class SObject {
 		Vector3 parentMinBounds = bounds.center - bounds.extents;
 		Vector3 parentMaxBounds = bounds.center + bounds.extents;
 
-		Vector3 objMinBounds = goBounds.center - goBounds.extents;
-		Vector3 objMaxBounds = goBounds.center + goBounds.extents;
+		Vector3 objMinBounds = goBounds.center / CHECK_BOUND - goBounds.extents / CHECK_BOUND;
+		Vector3 objMaxBounds = goBounds.center / CHECK_BOUND + goBounds.extents / CHECK_BOUND;
 
 		return (objMinBounds.x > parentMinBounds.x &&
 			objMaxBounds.x < parentMaxBounds.x &&
@@ -210,8 +213,10 @@ public class SObject {
 		go.transform.localScale = this.scale;
 
 		// Check Boundaries
-		if (!IsInBoundaries (go, bounds)) {
-			UnityEngine.Object.Destroy(go);
+		if (!IsInBoundaries (go, bounds))
+        {
+            Debug.Log("Object not in bounds!" + go.GetComponent<Renderer>().bounds.ToString() + bounds.ToString());
+            UnityEngine.Object.Destroy(go);
 			return objCount;
 		}
 

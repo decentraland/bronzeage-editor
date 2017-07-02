@@ -85,7 +85,7 @@ public class DecentralandEditor : EditorWindow {
 		GameObject go = GameObject.CreatePrimitive(PrimitiveType.Plane);
 		go.name = "Tile " + (position[0] / TILE_SIZE) + ":" + (position[2] / TILE_SIZE);
 		go.transform.position = position;
-		go.transform.localScale = new Vector3 (TILE_SCALE, TILE_SCALE, TILE_SCALE);
+		go.transform.localScale = new Vector3 (TILE_SIZE, TILE_SIZE, TILE_SIZE);
 	}
 
 	private Vector3 GetEmptyPosition() {
