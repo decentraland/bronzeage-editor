@@ -202,9 +202,15 @@ public class LandGenerator : MonoBehaviour {
 }
 
 [System.Serializable]
+public class RPCError {
+  public string message;
+  public int code;
+}
+
+[System.Serializable]
 public class RPCResponse {
 	public string result = null;
-	public string error = null;
+  public RPCError error = null;
 	public string id = null;
 
 	public bool IsUnmined() {
