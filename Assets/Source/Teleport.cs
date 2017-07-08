@@ -15,9 +15,9 @@ public class Teleport : MonoBehaviour
         // can have lamda functions which open up the use of untyped variables
         //these variables can only live INSIDE a function. 
         RaycastHit hit;
-        Debug.DrawRay(transform.position, -up * 4, Color.green);
+        Debug.DrawRay(transform.position, -up *2, Color.green);
 
-        if (Physics.Raycast(transform.position, -up, out hit, 4))
+        if (Physics.Raycast(transform.position, -up, out hit, 2))
         {
 
             Debug.Log("HIT");
