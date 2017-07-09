@@ -22,7 +22,7 @@ public class ChatSystem : MonoBehaviour {
 
     private float lastTime = 0;
     private MumbleClient _mumbleClient;
-    public string HostName = "1.2.3.4";
+    public string HostName = "1.2.3.5";
     public int Port = 64738;
     public string Username = "ExampleUser";
     public string Password = "1passwordHere!";
@@ -34,7 +34,7 @@ public class ChatSystem : MonoBehaviour {
 
         if (HostName == "1.2.3.4")
         {
-            Debug.LogError("Please set the mumble host name to your mumble server");
+            //Debug.LogError("Please set the mumble host name to your mumble server");
             return;
         }
         Application.runInBackground = true;

@@ -6,4 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Splash.unity
+    guid: 19a1c8bb38aede04c8beb2b37d01949c
+  - enabled: 1
     path: Assets/Scenes/Browser.unity
+    guid: 2752017945e524ccba16cdef45ae928a
+  - enabled: 1
+    path: Assets/Scenes/Builder.unity
+    guid: c327b822e644944dba5f46296d2705fe
+  - enabled: 1
+    path: Assets/Scenes/TeleportSelect.unity
+    guid: 810c66d5e20f4d141911e2ffc62109ec
