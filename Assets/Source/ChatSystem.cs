@@ -34,7 +34,7 @@ public class ChatSystem : MonoBehaviour {
 
         if (HostName == "1.2.3.4")
         {
-            Debug.LogError("Please set the mumble host name to your mumble server");
+            //Debug.LogError("Please set the mumble host name to your mumble server");
             return;
         }
         Application.runInBackground = true;
