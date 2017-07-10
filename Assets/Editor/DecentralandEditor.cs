@@ -147,14 +147,38 @@ public class DecentralandEditor : EditorWindow {
 
 		while (! www.isDone) {} // busy wait
 
-		if (string.IsNullOrEmpty(www.error)) {
-			RPCResponse response = JsonUtility.FromJson<RPCResponse>(www.text);
-			Debug.Log("Successfully published tile!");
-			published = true;
-		} else {
-			Debug.Log("Error publishing tile! " + www.error);
-			publishError = true;
-		}
+    // Web transaction error
+    if(!string.IsNullOrEmpty(www.error)) {
+      Debug.Log("Error publishing tile! Web error: "+www.error);
+      publishError = true;
+    }
+    
+    // Successful web transaction
+    else {
+      
+      // Process RPC response
+      string responseJson = www.text;
+      Debug.Log(responseJson);
+      RPCResponse response = JsonUtility.FromJson<RPCResponse>(responseJson);
+      
+      // RPC error response
+      /*
+       * NOTE: Not great as it assumes code 0 is success, nowhere guaranteed in JSONRPC or the bitcoin API.
+       * Artifact of the JsonUtility deserialization which generates an instance for a `null` value in the JSON.
+       * Should not be done this way in production.
+       */
+      if (response.error != null && response.error.code != 0) {
+        Debug.Log("Error publishing tile! RPC error: "+response.error.message);
+        publishError = true;
+      }
+      
+      // Successful publication
+      else {
+        Debug.Log("Successfully published tile!");
+        published = true;
+      }
+      
+    }
 
 		publishing = false;
 	}
