@@ -48,6 +48,7 @@ public class LandGenerator : MonoBehaviour {
 				} catch {}
 			}
 		}
+
 		return new Vector2(0, 0);
 	}
 
@@ -119,7 +120,7 @@ public class LandGenerator : MonoBehaviour {
 
 	void OnGUI () {
 		string tileName;
-		if (!names.TryGetValue (currentTile, out tileName)) tileName = "Empty Land";
+		if (! names.TryGetValue (currentTile, out tileName)) tileName = "Empty Land";
 		string message = tileName + " (" + currentTile [0] + ":" + currentTile [1] + ")";
 		GUI.Label (new Rect (10, 10, 200, 20), message);
 
@@ -164,53 +165,41 @@ public class LandGenerator : MonoBehaviour {
 		WWW www = new WWW("https://decentraland.org/content/" + fileName);
 		yield return www;
 
-		if (!string.IsNullOrEmpty(www.error))
-		{
-
+		if (! string.IsNullOrEmpty(www.error)) {
 			Debug.Log("Can't fetch tile content! " + index + " " + www.error);
 			names.Add(index, "Unclaimed Land");
 			Destroy(loader);
 		}
-		else
-		{
+		else {
 			Debug.Log("Downloaded content for tile (" + index[0] + "," + index[1] + ")");
-			try
-			{
 
+			try {
 				STile t = STile.FromBytes(www.bytes);
 				t.ToInstance(pos);
 				names.Add(index, t.GetName());
-			}
-			catch (EndOfStreamException e)
-			{
+			} catch (EndOfStreamException e) {
 				Debug.Log("Invalid" + index + e.ToString());
-			}
-			catch (SerializationException e)
-			{
+			} catch (SerializationException e) {
 				Debug.Log("Invalid" + index + e.ToString());
+			} catch (Exception e) {
+				Debug.Log("Exception found in " + index + e.ToString());
+			} finally {
+				Destroy(loader);
 			}
-            catch (Exception e)
-            {
-                Debug.Log("Exception found in " + index + e.ToString());
-            }
-            finally
-            {
-                Destroy(loader);
-            }
 		}
 	}
 }
 
 [System.Serializable]
 public class RPCError {
-  public string message;
-  public int code;
+	public string message;
+	public int code;
 }
 
 [System.Serializable]
 public class RPCResponse {
 	public string result = null;
-  public RPCError error = null;
+	public RPCError error = null;
 	public string id = null;
 
 	public bool IsUnmined() {
@@ -222,7 +211,7 @@ public class RPCResponse {
 	}
 
 	public bool HasData() {
-		return !(this.IsEmpty () || this.IsUnmined ());
+		return ! (this.IsEmpty () || this.IsUnmined ());
 	}
 }
 

@@ -93,7 +93,7 @@ public class DecentralandEditor : EditorWindow {
 		float radius = 1;
 
 		// Try the center
-		if (!Physics.CheckSphere (position, radius)) return position;
+		if (! Physics.CheckSphere (position, radius)) return position;
 
 		// Spiral check
 		position = new Vector3 (1, 0, -1) * TILE_SIZE;
@@ -148,7 +148,7 @@ public class DecentralandEditor : EditorWindow {
 		while (! www.isDone) {} // busy wait
 
     // Web transaction error
-    if(!string.IsNullOrEmpty(www.error)) {
+    if (! string.IsNullOrEmpty(www.error)) {
       Debug.Log("Error publishing tile! Web error: "+www.error);
       publishError = true;
     }
