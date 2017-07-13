@@ -145,7 +145,7 @@ public class SObject
 
     PrimitiveType mesh = PrimitiveType.Cube;
     bool isusingadvmesh = false;
-    Mesh advmesh = new Mesh();
+    byte[] advmesh_bytes;
     Vector3 position = new Vector3(0, 0, 0);
     Vector3 angles = new Vector3(0, 0, 0);
     Vector3 scale = new Vector3(0, 0, 0);
@@ -168,7 +168,6 @@ public class SObject
             objMinBounds.z > parentMinBounds.z &&
             objMaxBounds.z < parentMaxBounds.z);
     }
-
     public SObject(GameObject go, Bounds bounds)
     {
         if (!IsInBoundaries(go, bounds))
@@ -184,7 +183,7 @@ public class SObject
         // Store Mesh Primitive
         MeshFilter meshFilter = go.GetComponent<MeshFilter>();
 
-        this.advmesh = meshFilter.mesh;
+        advmesh_bytes = MeshSerializer.WriteMesh(meshFilter.mesh, true);
 
         if (meshFilter.sharedMesh.name.StartsWith("Cube"))
         {
@@ -250,7 +249,7 @@ public class SObject
         GameObject go = GameObject.CreatePrimitive(this.mesh);
         if (this.isusingadvmesh)
         {
-            go.GetComponent<MeshFilter>().mesh = this.advmesh;
+            go.GetComponent<MeshFilter>().mesh = MeshSerializer.ReadMesh(this.advmesh_bytes);
         }
         if (parent) go.transform.SetParent(parent.transform);
         go.transform.localPosition = this.position;
