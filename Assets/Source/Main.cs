@@ -78,7 +78,6 @@ public class STile {
 	public GameObject ToInstance(Vector3 position) {
 		GameObject go = GameObject.CreatePrimitive(PrimitiveType.Plane);
         go.name = this.name;
-		go.transform.localScale = new Vector3(CHECK_BOUND, CHECK_BOUND, CHECK_BOUND);
 		go.transform.position = position;
 
 		MeshRenderer renderer = go.GetComponent<MeshRenderer>();
@@ -91,13 +90,12 @@ public class STile {
 		}
 
 		int objCount = 0;
-		Bounds bounds = go.GetComponent<Renderer>().bounds;
+		Bounds bounds = new Bounds(position, new Vector3(TILE_SIZE, TILE_SIZE, TILE_SIZE));
 		foreach (SObject child in this.children) {
 			// Check Object Count
 			if (objCount >= MAX_CHILDREN) { return go;}
 			objCount = child.ToInstance(go, bounds, objCount);
         }
-        go.transform.localScale = new Vector3(TILE_SCALE, TILE_SCALE, TILE_SCALE);
 
         return go;
 	}
@@ -136,6 +134,7 @@ public class SObject {
 	byte[] texture = null;
 	SObject[] children;
 
+	// Leave known-working bounds check alone for publishing
 	private static bool IsInBoundaries(GameObject go, Bounds bounds) {
 		Bounds goBounds = go.GetComponent<Renderer>().bounds;
 
@@ -149,6 +148,38 @@ public class SObject {
 			objMaxBounds.x < parentMaxBounds.x &&
 			objMinBounds.z > parentMinBounds.z &&
 			objMaxBounds.z < parentMaxBounds.z);
+	}
+	
+	private static bool InArea(Bounds objBounds, Bounds areaBounds)
+	{
+				// Calculate area limits
+				Vector3 areaMin = areaBounds.center - areaBounds.extents;
+				Vector3 areaMax = areaBounds.center + areaBounds.extents;
+
+				// Calculate object limits
+				Vector3 objMin = objBounds.center - objBounds.extents;
+				Vector3 objMax = objBounds.center + objBounds.extents;
+
+				// Check for in top down area
+				/// No vertical bounds
+				bool inArea = (
+						objMin.x > areaMin.x &&
+						objMax.x < areaMax.x &&
+						objMin.z > areaMin.z &&
+						objMax.z < areaMax.z
+						);
+
+				// Return result
+				return inArea;
+	}
+	
+	private static bool InArea(GameObject obj, Bounds areaBounds)
+	{
+				// Acquire object bounds
+				Bounds objBounds = obj.GetComponent<Renderer>().bounds;
+
+				// Check for in area
+				return SObject.InArea(objBounds, areaBounds);
 	}
 
 	public SObject(GameObject go, Bounds bounds) {
@@ -213,7 +244,7 @@ public class SObject {
 		go.transform.localScale = this.scale;
 
 		// Check Boundaries
-		if (!IsInBoundaries (go, bounds))
+		if (!InArea (go, bounds))
         {
             Debug.Log("Object not in bounds!" + go.GetComponent<Renderer>().bounds.ToString() + bounds.ToString());
             UnityEngine.Object.Destroy(go);
