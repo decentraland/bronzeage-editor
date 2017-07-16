@@ -13,6 +13,7 @@ public class LandGenerator : MonoBehaviour {
 	public GameObject baseTile;
 	public GameObject loading;
 
+	private static bool DEBUG = true;
 
 	private static float TILE_SCALE = 1;
 	private static float TILE_SIZE = 40;
@@ -123,29 +124,6 @@ public class LandGenerator : MonoBehaviour {
 		if (! names.TryGetValue (currentTile, out tileName)) tileName = "Empty Land";
 		string message = tileName + " (" + currentTile [0] + ":" + currentTile [1] + ")";
 		GUI.Label (new Rect (10, 10, 200, 20), message);
-
-		/* GUI.Box (new Rect (Screen.width - 105,5,100,120), "Teleportation");
-
-
-		posX = GUI.TextField (new Rect (Screen.width - 85,35,60,20), posX.ToString());
-		posZ = GUI.TextField (new Rect (Screen.width - 85,65,60, 20), posZ.ToString());
-		if (GUI.Button (new Rect (Screen.width - 85, 95, 60, 20), "Go") || Input.GetKeyDown(KeyCode.T)) {
-			int valueX;
-			bool successX = int.TryParse(posX, out valueX);
-
-			int valueZ;
-			bool successZ = int.TryParse(posZ, out valueZ);
-			if (successX && successZ) {
-
-
-				player.transform.position = indexToPosition (new Vector2 ((float)valueX, (float)valueZ));
-				posZ = valueZ.ToString ();
-				posX = valueX.ToString ();
-				CreatePlaneAt (new Vector2 ((float)valueX, (float)valueZ));
-			} else {
-				Debug.Log ("Error parsing int");
-			}
-		}*/
 	}
 
 	private Vector3 indexToPosition(Vector2 index) {
@@ -155,14 +133,18 @@ public class LandGenerator : MonoBehaviour {
 	}
 
 	IEnumerator FetchTile(Vector2 index) {
+		string fileName = index[0] + "." + index[1] + ".lnd";
+		string host = DEBUG ? "localhost:8000" : "https://decentraland.org/content";
+		string url = host +  "/" + fileName;
+
 		Vector3 pos = indexToPosition(index);
 
 		// Temporal Placeholder
 		GameObject plane = Instantiate(baseTile, pos, Quaternion.identity);
 		GameObject loader = Instantiate(loading, pos, Quaternion.identity);
 		loader.transform.position = new Vector3(pos.x, pos.y + 2, pos.z);
-		string fileName = "" + index[0] + "." + index[1] + ".lnd";
-		WWW www = new WWW("https://decentraland.org/content/" + fileName);
+
+		WWW www = new WWW(url);
 		yield return www;
 
 		if (! string.IsNullOrEmpty(www.error)) {
