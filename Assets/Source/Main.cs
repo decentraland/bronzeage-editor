@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 
+using System.Linq;
 using System;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
-
+using System.Collections.Generic;
 
 [System.Serializable]
 public class STile
@@ -183,7 +184,8 @@ public class SObject
         // Store Mesh Primitive
         MeshFilter meshFilter = go.GetComponent<MeshFilter>();
 
-        advmesh_bytes = MeshSerializer.WriteMesh(meshFilter.mesh, true);
+        IEnumerable<Mesh> meshs = new List<Mesh>() { meshFilter.mesh };
+        advmesh_bytes = SimpleMeshSerializer.Serialize(meshs);
 
         if (meshFilter.sharedMesh.name.StartsWith("Cube"))
         {
@@ -249,7 +251,7 @@ public class SObject
         GameObject go = GameObject.CreatePrimitive(this.mesh);
         if (this.isusingadvmesh)
         {
-            go.GetComponent<MeshFilter>().mesh = MeshSerializer.ReadMesh(this.advmesh_bytes);
+            go.GetComponent<MeshFilter>().mesh = SimpleMeshSerializer.Deserialize(this.advmesh_bytes).First();
         }
         if (parent) go.transform.SetParent(parent.transform);
         go.transform.localPosition = this.position;
