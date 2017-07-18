@@ -188,6 +188,7 @@ public class SObject
         advmesh_bytes = SimpleMeshSerializer.Serialize(meshs);
 
         if (meshFilter.sharedMesh.name.StartsWith("Cube"))
+
         {
             this.mesh = PrimitiveType.Cube;
         }
