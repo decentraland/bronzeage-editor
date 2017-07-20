@@ -1,14 +1,13 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 using System.Collections;
 using System.Collections.Generic;
-
 using System.IO;
 using System.IO.Compression;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters;
-using System.Runtime.Serialization.Formatters.Binary;
-using UnityEngine.UI;
+
+using VoxelBusters.RuntimeSerialization;
+
 
 public class PublishTile : MonoBehaviour {
   private string api_url = "http://138.197.44.64:6748";
@@ -20,9 +19,7 @@ public class PublishTile : MonoBehaviour {
     GameObject tile = GameObject.Find("My Tile");
     tile.name = tileName.GetComponent<InputField>().text;
 
-    // Serialize
-    STile original = new STile (tile);
-    string content = original.ToBase64();
+    string content = RSManager.Serialize<GameObject>(tile);
 
     Publish(content);
   }

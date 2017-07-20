@@ -3,11 +3,10 @@ using UnityEngine;
 
 using System.Collections;
 using System.Collections.Generic;
-
 using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters;
-using System.Runtime.Serialization.Formatters.Binary;
+
+using VoxelBusters.RuntimeSerialization;
+
 
 public class DecentralandEditor : EditorWindow {
 	private static float TILE_SCALE = 1;
@@ -61,14 +60,12 @@ public class DecentralandEditor : EditorWindow {
 		EditorGUILayout.EndHorizontal ();
 
 		if (GUILayout.Button("Publish Selected Tile ")) {
-			// Serialize to file
-			STile original = new STile (tile);
+			string content = RSManager.Serialize<GameObject>(tile);
+
 			Vector2 index = new Vector2(
 				(tile.transform.position.x / TILE_SIZE) + xOffset,
 				(tile.transform.position.z / TILE_SIZE) + zOffset
 			);
-
-			string content = original.ToBase64();
 
 			PublishTile(index, content);
 		}
@@ -81,55 +78,6 @@ public class DecentralandEditor : EditorWindow {
 
 	}
 
-	private void CreateEmtpy(Vector3 position) {
-		GameObject go = GameObject.CreatePrimitive(PrimitiveType.Plane);
-		go.name = "Tile " + (position[0] / TILE_SIZE) + ":" + (position[2] / TILE_SIZE);
-		go.transform.position = position;
-		go.transform.localScale = new Vector3 (TILE_SIZE, TILE_SIZE, TILE_SIZE);
-	}
-
-	private Vector3 GetEmptyPosition() {
-		Vector3 position = new Vector3 (0, 0, 0);
-		float radius = 1;
-
-		// Try the center
-		if (! Physics.CheckSphere (position, radius)) return position;
-
-		// Spiral check
-		position = new Vector3 (1, 0, -1) * TILE_SIZE;
-		int landSize = 3;
-		int directionIndex = 0;
-		int directionCount = 1;
-
-		Vector3[] directions = {
-			new Vector3 (0, 0, 1) * TILE_SIZE,
-			new Vector3 (-1, 0, 0) * TILE_SIZE,
-			new Vector3 (0, 0, -1) * TILE_SIZE,
-			new Vector3 (1, 0, 0) * TILE_SIZE,
-		};
-
-		while (Physics.CheckSphere (position, radius)) {
-			position += directions [directionIndex];
-			directionCount++;
-
-			// Make a turn
-			if (directionCount == landSize) {
-				directionCount = 1;
-				directionIndex++;
-
-				// Jump to next ring
-				if (directionIndex == directions.Length) {
-					landSize += 2;
-					directionIndex = 0;
-					directionCount = 1;
-					position += new Vector3 (1, 0, -1) * TILE_SIZE;
-				}
-			}
-		}
-
-		return position;
-	}
-
 	void PublishTile(Vector2 index, string content) {
 		publishing = true;
 		publishError = false;
@@ -138,7 +86,19 @@ public class DecentralandEditor : EditorWindow {
 		// Basic Auth
 		Dictionary<string,string> headers = new Dictionary<string, string>();
 		headers["Authorization"] = "Basic " + System.Convert.ToBase64String(
-		System.Text.Encoding.ASCII.GetBytes("bitcoinrpc:"+nodeAuth));
+			System.Text.Encoding.ASCII.GetBytes("bitcoinrpc:" + nodeAuth)
+		);
+
+		// TODO: fix compression efforts
+		// byte[] binaryContent = System.Text.Encoding.ASCII.GetBytes(content);
+		// byte[] compressedBinaryContent = CLZF2.Compress(binaryContent);
+
+		// Debug.Log("Content length:");
+		// Debug.Log(binaryContent.Length);
+		// Debug.Log("Content length compressed:");
+		// Debug.Log(compressedBinaryContent.Length);
+
+		// string json = "{\"method\":\"settile\",\"params\":[" + index [0] + "," + index [1] + ",\"" + compressedBinaryContent + "\"],\"id\":0}";
 
 		string json = "{\"method\":\"settile\",\"params\":[" + index [0] + "," + index [1] + ",\"" + content + "\"],\"id\":0}";
 		byte[] data = System.Text.Encoding.ASCII.GetBytes(json.ToCharArray());

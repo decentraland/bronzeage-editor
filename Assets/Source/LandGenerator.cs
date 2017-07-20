@@ -50,7 +50,7 @@ public class LandGenerator : MonoBehaviour {
 			}
 		}
 
-		return new Vector2(0, 0);
+		return new Vector2(0, 5);
 	}
 
 	// This function creates planes for adjacent enviroment
@@ -134,7 +134,7 @@ public class LandGenerator : MonoBehaviour {
 
 	IEnumerator FetchTile(Vector2 index) {
 		string fileName = index[0] + "." + index[1] + ".lnd";
-		string host = DEBUG ? "localhost:8000" : "https://decentraland.org/content";
+		string host = DEBUG ? "http://lvh.me/tiles" : "https://decentraland.org/content";
 		string url = host +  "/" + fileName;
 
 		Vector3 pos = indexToPosition(index);
@@ -156,9 +156,19 @@ public class LandGenerator : MonoBehaviour {
 			Debug.Log("Downloaded content for tile (" + index[0] + "," + index[1] + ")");
 
 			try {
-				STile t = STile.FromBytes(www.bytes);
-				t.ToInstance(pos);
-				names.Add(index, t.GetName());
+				// TODO: fix decompression efforts
+				// byte[] blob = CLZF2.Decompress(www.bytes);
+				// string data = System.Convert.ToBase64String(blob);
+				//
+				// Debug.Log("Blob length:");
+				// Debug.Log(www.bytes.Length);
+				// Debug.Log("Decompressed length:");
+				// Debug.Log(blob.Length);
+				string data = System.Convert.ToBase64String(www.bytes);
+
+				GameObject go = RSManager.DeserializeData<GameObject>(data);
+				go.transform.position = pos;
+				names.Add(index, go.name);
 			} catch (EndOfStreamException e) {
 				Debug.Log("Invalid" + index + e.ToString());
 			} catch (SerializationException e) {
@@ -196,7 +206,6 @@ public class RPCResponse {
 		return ! (this.IsEmpty () || this.IsUnmined ());
 	}
 }
-
 
 [System.Serializable]
 public class APIResponse {
