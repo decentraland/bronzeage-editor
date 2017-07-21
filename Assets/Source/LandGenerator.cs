@@ -13,7 +13,7 @@ public class LandGenerator : MonoBehaviour {
 	public GameObject baseTile;
 	public GameObject loading;
 
-	private static bool DEBUG = true;
+	private static bool DEBUG = false;
 
 	private static float TILE_SCALE = 1;
 	private static float TILE_SIZE = 40;
@@ -50,7 +50,7 @@ public class LandGenerator : MonoBehaviour {
 			}
 		}
 
-		return new Vector2(0, 5);
+		return new Vector2(0, 0);
 	}
 
 	// This function creates planes for adjacent enviroment
