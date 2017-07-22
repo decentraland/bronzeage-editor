@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 
-using VoxelBusters.RuntimeSerialization;
-
 
 public class PublishTile : MonoBehaviour {
   private string api_url = "http://138.197.44.64:6748";
@@ -19,7 +17,8 @@ public class PublishTile : MonoBehaviour {
     GameObject tile = GameObject.Find("My Tile");
     tile.name = tileName.GetComponent<InputField>().text;
 
-    string content = RSManager.Serialize<GameObject>(tile);
+    // TODO migrate assetbundle generation from DecentralandEditor.cs
+    string content = "";
 
     Publish(content);
   }

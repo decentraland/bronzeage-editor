@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.IO;
 using System;
 
+using CEUtilities.Helpers;
+
 public class LandGenerator : MonoBehaviour {
 
 	public GameObject player;
@@ -156,18 +158,19 @@ public class LandGenerator : MonoBehaviour {
 			Debug.Log("Downloaded content for tile (" + index[0] + "," + index[1] + ")");
 
 			try {
-				// TODO: fix decompression efforts
-				// byte[] blob = CLZF2.Decompress(www.bytes);
-				// string data = System.Convert.ToBase64String(blob);
-				//
-				// Debug.Log("Blob length:");
-				// Debug.Log(www.bytes.Length);
-				// Debug.Log("Decompressed length:");
-				// Debug.Log(blob.Length);
-				string data = System.Convert.ToBase64String(www.bytes);
+        // TODO: fix decompression efforts
+        // byte[] blob = CLZF2.Decompress(www.bytes);
+        //
+        // Debug.Log("Data length:");
+        // Debug.Log(www.bytes.Length);
+        // Debug.Log("Decompressed length:");
+        // Debug.Log(blob.Length);
 
-				GameObject go = RSManager.DeserializeData<GameObject>(data);
-				go.transform.position = pos;
+        var bundle = AssetBundleUtil.GetBundleFromBytes(www.bytes);
+        var prefab = AssetBundleUtil.LoadAssetBundle<GameObject>(bundle);
+        var go = Instantiate<GameObject>(prefab);
+
+        go.transform.position = pos;
 				names.Add(index, go.name);
 			} catch (EndOfStreamException e) {
 				Debug.Log("Invalid" + index + e.ToString());
