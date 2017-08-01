@@ -204,7 +204,8 @@ public class RPCResponse {
 	}
 
 	public bool IsEmpty() {
-		return this.result == "0000000000000000000000000000000000000000000000000000000000000000";
+		// An IPFS hash of all zeroes.
+		return this.result == "00000000000000000000000000000000000000000000000000000000000000000000";
 	}
 
 	public bool HasData() {
